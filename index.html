@@ -1,96 +1,1315 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cieverose College - Providing quality education since 2010">
     <script defer src="/_vercel/insights/script.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
-    />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
-    />
-  </head>
-  <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-  </body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Cieverose College, Inc. | Quality Education</title>
+    <style>
+        /* ===== Enhanced Accordion Styles ===== */
+.accordion {
+    width: 100%;
+    margin: var(--space-lg) 0;
+}
+
+.accordion-item {
+    margin-bottom: var(--space-md);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+}
+
+.accordion-item:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.accordion-header {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    padding: var(--space-md) var(--space-lg);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--transition-fast);
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+}
+
+.accordion-header:hover {
+    background-color: var(--primary-dark);
+}
+
+.accordion-header:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+.accordion-header.active {
+    background-color: var(--primary-dark);
+}
+
+.accordion-header::after {
+    content: '+';
+    font-size: 1.2rem;
+    transition: transform var(--transition-normal);
+}
+
+.accordion-header.active::after {
+    content: '-';
+}
+
+.accordion-content {
+    background-color: var(--card-bg);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height var(--transition-slow) ease;
+}
+
+.accordion-content-inner {
+    padding: var(--space-md) var(--space-lg);
+}
+
+/* Show content when active */
+.accordion-item.active .accordion-content {
+    max-height: 2000px; /* Adjust based on your content */
+}
+
+/* Animation when opening */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.accordion-item.active .accordion-content-inner {
+    animation: slideDown 0.3s ease-out;
+}
+    </style>
+</head>
+<body>
+    <nav aria-label="Main navigation">
+	<!-- <li><a href="#updates"><i class="fas fa-bullhorn"></i> Updates</a></li> -->
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Cieverose College Logo" style="height: 50px;">
+                <span>Cieverose College, Inc.</span>
+            </a>
+            <button class="mobile-menu-btn" aria-expanded="false" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul>
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#programs"><i class="fas fa-book-open"></i> Programs</a></li>
+                <li><a href="#library"><i class="fas fa-book"></i> Library</a></li>
+                <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="https://www.facebook.com/profile.php?id=100069140122435" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> Facebook</a></li>
+                <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header class="hero" role="banner">
+        <div class="hero-content">
+            <h1>Empowering Futures at Cieverose College, Inc.</h1>
+            <p>Providing quality education that combines academic excellence with practical skills development since 2010</p>
+            <div class="hero-buttons">
+                <a href="#programs" class="cta-button">
+                    <i class="fas fa-book-open"></i> Explore Programs
+                </a>
+                <a href="#contact" class="cta-button secondary">
+                    <i class="fas fa-phone-alt"></i> Contact Us
+                </a>
+            </div>
+        </div>
+        <a href="#welcome" class="scroll-down" aria-label="Scroll down">
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </header>
+    
+    <main class="container">
+        <section id="welcome" class="section">
+            <h2>Welcome to Cieverose College</h2>
+            <p class="intro-text">
+                At Cieverose College, we are committed to nurturing well-rounded individuals through a balanced approach to education that combines rigorous academics with practical life skills development.
+            </p>
+            
+            <div class="mission-vision-grid">
+                <article class="mission-card">
+                    <div class="card-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>To be a leading educational institution that provides high quality training, knowledge, skills and services in all areas specially in technical education industry.</p>
+                </article>
+                
+                <article class="mission-card">
+                    <div class="card-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To empower youth by providing quality education which centers in the development of totality of a person in physical, emotional, spiritual, intellectual, and life skills necessary to prepare them to be contributory individuals </p>
+                </article>
+                
+                <article class="mission-card">
+                    <div class="card-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Our Philosophy</h3>
+                    <p class="philosophy">"To serve God is to Serve Others."</p>
+                </article>
+            </div>
+            
+            
+            <article class="mt-xl">
+                <h3><i class="fas fa-flag text-accent"></i> SCHOOL GOALS</h3>
+                <ul class="school-goals">
+                    <li>Provide high-quality graduates that meet industry standards</li>
+                    <li>Foster holistic student development addressing physical, emotional, spiritual, intellectual, and life skills</li>
+                    <li>Empower youth to become responsible, productive, and contributing members of their communities</li>
+                    <li>Cultivate a learning environment rooted in strong faith, integrity, and respect for diversity</li>
+                    <li>Promote excellence and hard work among students, faculty, and staff</li>
+                    <li>Ensure continuous improvement in educational programs and services to maintain leadership in education</li>
+                    <li>Encourage love, respect, and understanding within the school community to build a harmonious environment</li>
+                    <li>Conduct research and extension services focused on community development</li>
+                </ul>
+            </article>
+            
+            <!-- In the Welcome section, replace the core values article with this: -->
+<article class="mt-xl">
+    <h3><i class="fas fa-star text-accent"></i> OUR CORE VALUES, OUR SHIELD</h3>
+    <div class="core-values-grid">
+        <div class="core-value-card" tabindex="0">
+            <div class="core-value-header">
+                <span class="core-value-letter">S</span>
+                <h4>Strong Faith</h4>
+            </div>
+            <div class="core-value-content">
+                <p>A foundation of spiritual strength and moral integrity that guides personal and communal growth. Strong faith nurtures resilience, hope, and ethical decision-making, empowering students to face challenges with confidence and purpose.</p>
+            </div>
+        </div>
+        
+        <div class="core-value-card" tabindex="0">
+            <div class="core-value-header">
+                <span class="core-value-letter">H</span>
+                <h4>Hard Work</h4>
+            </div>
+            <div class="core-value-content">
+                <p>The commitment to diligence, perseverance, and consistent effort in all academic and personal endeavors. Hard work instills discipline and a strong work ethic, enabling students to achieve excellence and overcome obstacles.</p>
+            </div>
+        </div>
+        
+        <div class="core-value-card" tabindex="0">
+            <div class="core-value-header">
+                <span class="core-value-letter">I</span>
+                <h4>Integrity</h4>
+            </div>
+            <div class="core-value-content">
+                <p>Upholding honesty, transparency, and ethical behavior in all actions. Integrity fosters trustworthiness and accountability, essential for building character and maintaining a respectful academic and social environment.</p>
+            </div>
+        </div>
+        
+        <div class="core-value-card" tabindex="0">
+            <div class="core-value-header">
+                <span class="core-value-letter">E</span>
+                <h4>Excellence</h4>
+            </div>
+            <div class="core-value-content">
+                <p>Striving for the highest standards in education, innovation, and service. Excellence motivates continuous improvement, creativity, and the pursuit of quality in all aspects of learning and community engagement.</p>
+            </div>
+        </div>
+        
+        <div class="core-value-card" tabindex="0">
+            <div class="core-value-header">
+                <span class="core-value-letter">L</span>
+                <h4>Love</h4>
+            </div>
+            <div class="core-value-content">
+                <p>Cultivating compassion, empathy, and genuine care for others. Love promotes harmonious relationships, social responsibility, and a supportive community where everyone feels valued and respected.</p>
+            </div>
+        </div>
+        
+        <div class="core-value-card" tabindex="0">
+            <div class="core-value-header">
+                <span class="core-value-letter">D</span>
+                <h4>Diversity & Deference</h4>
+            </div>
+            <div class="core-value-content">
+                <p>Valuing the richness of different cultures, ideas, and perspectives while showing respect and humility towards others. Embracing diversity and practicing deference foster inclusivity, collaboration, and mutual understanding in a globalized world.</p>
+            </div>
+        </div>
+    </div>
+    <p class="text-center"><strong>This SHIELD framework serves as a guiding compass for students, faculty, and staff at Cieverose College, aligning with its mission to empower youth through holistic education and character formation.</strong></p>
+</article>
+
+<!-- Dynamic Content Section -->
+<section id="updates" class="section bg-section">
+    <h2 class="text-center">Campus Updates</h2>
+    <p class="text-center mb-xl">Stay informed with the latest news and events</p>
+    
+    <div class="dynamic-content-grid">
+        <!-- Announcements Widget -->
+        <div class="widget announcements-widget">
+            <div class="widget-header">
+                <div class="widget-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h3>Announcements</h3>
+            </div>
+            <div id="announcements-container">
+                <div class="announcement-item">
+                    <div class="announcement-date">May 15, 2025</div>
+                    <h4 class="announcement-title">Enrollment for SY 2025-2026 Now Open</h4>
+                    <p class="announcement-content">Registration for all Senior High School strands is now ongoing. Visit the registrar's office for details.</p>
+                </div>
+                <div class="announcement-item">
+                    <div class="announcement-date">June 9, 2025</div>
+                    <h4 class="announcement-title">Orientation Schedule</h4>
+                    <p class="announcement-content">New student orientation will be held on July 15, 2025 at the school auditorium.</p>
+                </div>
+                <!-- <div class="announcement-item"> -->
+                    <!-- <div class="announcement-date">June 20, 2025</div> -->
+                    <!-- <h4 class="announcement-title">Library Hours Update</h4> -->
+                    <!-- <p class="announcement-content">Library will be open from 7:30 AM to 5:30 PM starting July 1.</p> -->
+                <!-- </div> -->
+            </div>
+            <a href="#" class="view-all">View All Announcements</a>
+        </div>
+        
+        <!-- Events Widget -->
+        <div class="widget events-widget">
+            <div class="widget-header">
+                <div class="widget-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>Upcoming Events</h3>
+            </div>
+            <div id="events-container">
+                <div class="event-item">
+                    <div class="event-date">
+                        <span class="event-day">9</span>
+                        <span class="event-month">June</span>
+                    </div>
+                    <div class="event-details">
+                        <h4 class="event-title">New Student Orientation</h4>
+                        <p class="event-time">8:00 AM - 12:00 PM</p>
+                        <p class="event-location">School Auditorium</p>
+                    </div>
+                </div>
+                <div class="event-item">
+                    <div class="event-date">
+                        <span class="event-day">16</span>
+                        <span class="event-month">June</span>
+                    </div>
+                    <div class="event-details">
+                        <h4 class="event-title">First Day of Classes</h4>
+                        <p class="event-time">7:00 AM</p>
+                        <p class="event-location">All Classrooms</p>
+                    </div>
+                </div>
+                <!-- <div class="event-item"> -->
+                    <!-- <div class="event-date"> -->
+                        <!-- <span class="event-day">28</span> -->
+                        <!-- <span class="event-month">Jul</span> -->
+                    <!-- </div> -->
+                    <!-- <div class="event-details"> -->
+                        <!-- <h4 class="event-title">Career Guidance Seminar</h4> -->
+                        <!-- <p class="event-time">1:00 PM - 4:00 PM</p> -->
+                        <!-- <p class="event-location">Multi-Purpose Hall</p> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+            </div>
+            <a href="#" class="view-all">View All Events</a>
+        </div>
+        
+        <!-- News Widget -->
+        <div class="widget news-widget">
+            <div class="widget-header">
+                <div class="widget-icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <h3>News & Updates</h3>
+            </div>
+            <div id="news-container">
+                <div class="news-item">
+                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Graduation ceremony" class="news-image">
+                    <div class="news-content">
+                        <h4 class="news-title">Class of 2025 Graduation Ceremony</h4>
+                        <p class="news-excerpt">Our recent graduates celebrated their achievements in a memorable ceremony...</p>
+                        <!-- <div class="news-date">June 10, 2025</div> -->
+                    </div>
+                </div>
+                <!-- <div class="news-item"> -->
+                    <!-- <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Science fair" class="news-image"> -->
+                    <!-- <div class="news-content"> -->
+                        <!-- <h4 class="news-title">Science Fair Winners Announced</h4> -->
+                        <!-- <p class="news-excerpt">Students showcase innovative projects at annual science fair...</p> -->
+                        <!-- <div class="news-date">May 25, 2025</div> -->
+                    <!-- </div> -->
+                <!-- </div> -->
+            </div>
+            <a href="#" class="view-all">View All News</a>
+        </div>
+    </div>
+</section>
+
+<!-- <!-- Calendar Section --> -->
+<!-- <section id="calendar" class="section"> -->
+    <!-- <h2 class="text-center">Academic Calendar</h2> -->
+    <!-- <p class="text-center mb-xl">Important dates for SY 2025-2026</p> -->
+    
+    <!-- <div class="calendar-container"> -->
+        <!-- <div class="calendar-header"> -->
+            <!-- <button id="prev-month" class="calendar-nav"><i class="fas fa-chevron-left"></i></button> -->
+            <!-- <h3 id="current-month-year">July 2025</h3> -->
+            <!-- <button id="next-month" class="calendar-nav"><i class="fas fa-chevron-right"></i></button> -->
+        <!-- </div> -->
+        <!-- <div class="calendar-grid" id="calendar-grid"> -->
+            <!-- <!-- Calendar will be generated by JavaScript --> -->
+        <!-- </div> -->
+        <!-- <div class="calendar-events"> -->
+            <!-- <h4>Key Dates:</h4> -->
+            <!-- <ul class="key-dates-list"> -->
+                <!-- <li><span class="date-badge">Jul 15</span> New Student Orientation</li> -->
+                <!-- <li><span class="date-badge">Jul 20</span> First Day of Classes</li> -->
+                <!-- <li><span class="date-badge">Aug 21</span> Midterm Examinations</li> -->
+                <!-- <li><span class="date-badge">Sep 25</span> Foundation Day</li> -->
+                <!-- <li><span class="date-badge">Oct 15-18</span> Final Examinations</li> -->
+            <!-- </ul> -->
+        <!-- </div> -->
+    <!-- </div> -->
+<!-- </section> -->
+
+
+        </section>
+        
+        <section id="programs" class="section bg-section">
+            <h2 class="text-center">Our Senior High School Strands</h2>
+            <p class="text-center mb-xl">Choose the path that aligns with your aspirations and career goals</p>
+            
+            <div class="programs">
+                <article class="program-card">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="ICT students working on computers">
+                    <div class="program-card-content">
+                        <h3><i class="fas fa-laptop-code text-accent"></i> Information and Communication Technology (ICT)</h3>
+                        <p>Prepares students for careers in programming, animation, and computer systems servicing. Covers subjects like computer programming, web development, and networking fundamentals.</p>
+                        <ul>
+                            <li>Career paths: Programmer, Web Developer, IT Specialist</li>
+                            <li>Specialized subjects: Programming, Animation, Computer Systems Servicing</li>
+                            <li>NC II Certification opportunities</li>
+                        </ul>
+                    </div>
+                </article>
+                
+                <article class="program-card">
+                    <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="HE students cooking in kitchen">
+                    <div class="program-card-content">
+                        <h3><i class="fas fa-utensils text-accent"></i> Home Economics (HE)</h3>
+                        <p>Focuses on livelihood skills in cookery, bread and pastry production, food and beverage services, tourism, and hospitality management.</p>
+                        <ul>
+                            <li>Career paths: Chef, Baker, Hotel/Restaurant Manager</li>
+                            <li>Specialized subjects: Cookery, Food and Beverage Services, Tourism</li>
+                            <li>Hands-on training in fully equipped kitchen labs</li>
+                        </ul>
+                    </div>
+                </article>
+                
+                <article class="program-card">
+                    <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="HUMSS students in discussion">
+                    <div class="program-card-content">
+                        <h3><i class="fas fa-book-reader text-accent"></i> Humanities and Social Sciences (HUMSS)</h3>
+                        <p>Designed for students interested in liberal arts, education, journalism, and social sciences. Develops critical thinking and communication skills.</p>
+                        <ul>
+                            <li>Career paths: Teacher, Lawyer, Journalist, Psychologist</li>
+                            <li>Specialized subjects: Creative Writing, Social Sciences, Philosophy</li>
+                            <li>Strong preparation for college degrees in arts and humanities</li>
+                        </ul>
+                    </div>
+                </article>
+                
+                <article class="program-card">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="ABM students analyzing data">
+                    <div class="program-card-content">
+                        <h3><i class="fas fa-chart-line text-accent"></i> Accountancy, Business and Management (ABM)</h3>
+                        <p>Focuses on business principles, financial management, and entrepreneurship. Prepares students for careers in business and accountancy.</p>
+                        <ul>
+                            <li>Career paths: Accountant, Entrepreneur, Business Manager</li>
+                            <li>Specialized subjects: Business Math, Finance, Marketing</li>
+                            <li>Real-world business simulations and case studies</li>
+                        </ul>
+                    </div>
+                </article>
+                
+                <article class="program-card">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="GAS students in classroom">
+                    <div class="program-card-content">
+                        <h3><i class="fas fa-graduation-cap text-accent"></i> General Academic Strand (GAS)</h3>
+                        <p>Designed for students who are undecided on their college path, offering a broad range of subjects across different disciplines.</p>
+                        <ul>
+                            <li>Career paths: College preparation for any degree program</li>
+                            <li>Specialized subjects: Humanities, Social Sciences, Business, Science</li>
+                            <li>Flexible curriculum for diverse interests</li>
+                            <li>Ideal for students exploring multiple career options</li>
+                            <li>Strong foundation for liberal arts and sciences</li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+        
+        <!-- Library Collections Section -->
+        <!-- Library Collections Section -->
+<section id="library" class="library-section section">
+    <div class="container">
+        <div class="library-header">
+            <img src="logo.png" alt="Cieverose College Logo" class="library-logo">
+            <div>
+                <h2>Library Collections</h2>
+                <p>Explore our extensive collection of academic resources</p>
+            </div>
+        </div>
+        <!-- Professional Journals Accordion -->
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <span><i class="fas fa-book text-accent"></i> Professional Journals Collection</span>
+            </div>
+            <div class="accordion-content" style="max-height: 1000px;">
+                <div class="accordion-content-inner">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Title / Product Name</th>
+                                <th>Author / Brand</th>
+                                <th>Year</th>
+                                <th>Publisher / Brand</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Prayer Journal Konek 5.5x8 Inches, 128 Pages</td>
+                                <td>National Book Store</td>
+                                <td>2024</td>
+                                <td>National Book Store</td>
+                                <td>Classic/fancy journal</td>
+                            </tr>
+                                            <tr>
+                                                <td>Gratitude Journal Ang Bible Pinoy Version 5.5x8</td>
+                                                <td>National Book Store</td>
+                                                <td>2024</td>
+                                                <td>National Book Store</td>
+                                                <td>Themed journal (faith-based)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kozo Journal Notebook A4 (various colors)</td>
+                                                <td>National Book Store</td>
+                                                <td>2023</td>
+                                                <td>National Book Store</td>
+                                                <td>Fancy journal with textured cover</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Little Birdie Paintable Canvas Soft Cover A5 Dotted 80 Pages</td>
+                                                <td>Little Birdie</td>
+                                                <td>2023</td>
+                                                <td>Little Birdie</td>
+                                                <td>Fancy/themed journal</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Little Birdie Paintable Canvas Cover A6 90gsm 120 Pages</td>
+                                                <td>Little Birdie</td>
+                                                <td>2023</td>
+                                                <td>Little Birdie</td>
+                                                <td>Fancy/themed journal</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2025 Daily Planner with Foil Stamping 14.8x21cm</td>
+                                                <td>Best Buy</td>
+                                                <td>2024</td>
+                                                <td>Best Buy (NBS brand)</td>
+                                                <td>Themed planner/journal</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Best Buy Budget & Saver Planner 14.8x20.5 cm 60 Sheets</td>
+                                                <td>Best Buy</td>
+                                                <td>2024</td>
+                                                <td>Best Buy (NBS brand)</td>
+                                                <td>Classic planner</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2025 Monthly Planner Pad 11x8.5 inches, Garden</td>
+                                                <td>National Book Store</td>
+                                                <td>2024</td>
+                                                <td>National Book Store</td>
+                                                <td>Themed planner</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Undated Weekly Planner 4x1 inches 54 Sheets, Beige</td>
+                                                <td>National Book Store</td>
+                                                <td>2024</td>
+                                                <td>National Book Store</td>
+                                                <td>Classic planner</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Undated Weekly Horizontal Planner 8x6 inches, Lime</td>
+                                                <td>National Book Store</td>
+                                                <td>2024</td>
+                                                <td>National Book Store</td>
+                                                <td>Themed planner</td>
+                                           </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+                
+                <!-- Periodicals Accordion -->
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <span><i class="fas fa-newspaper text-accent"></i> Periodicals Collection</span>
+            </div>
+            <div class="accordion-content" style="max-height: 1000px;">
+                <div class="accordion-content-inner">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Title</th>
+                                <th>Publisher / Brand</th>
+                                <th>Year / Issue Date</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                                <td>1</td>
+                                                <td>Mega Magazine</td>
+                                                <td>Mega Publishing</td>
+                                                <td>Feb 2025</td>
+                                                <td>Local lifestyle & culture</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Rising Tigers: The Nation Builders in Asia</td>
+                                                <td>Rising Tigers Media</td>
+                                                <td>2024</td>
+                                                <td>Regional business & leadership</td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>Billboard PH Special - Ben and Ben Magazine</td>
+                                                <td>Billboard Philippines</td>
+                                                <td>2024</td>
+                                                <td>Entertainment & music</td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>Vogue Magazine</td>
+                                                <td>Condé Nast</td>
+                                                <td>Dec 2023</td>
+                                                <td>International fashion</td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>Vogue Magazine</td>
+                                                <td>Condé Nast</td>
+                                                <td>Oct 2023</td>
+                                                <td>International fashion</td>
+                                            </tr>
+                                            <tr>
+                                                <td>6</td>
+                                                <td>Vogue Magazine</td>
+                                                <td>Condé Nast</td>
+                                                <td>Sep 2023</td>
+                                                <td>International fashion</td>
+                                            </tr>
+                                            <tr>
+                                                <td>7</td>
+                                                <td>Vogue Magazine</td>
+                                                <td>Condé Nast</td>
+                                                <td>Jul 2023</td>
+                                                <td>International fashion</td>
+                                            </tr>
+                                            <tr>
+                                                <td>8</td>
+                                                <td>Vogue Magazine</td>
+                                                <td>Condé Nast</td>
+                                                <td>Jun 2023</td>
+                                                <td>International fashion</td>
+                                            </tr>
+                                            <tr>
+                                                <td>9</td>
+                                                <td>Vogue Magazine</td>
+                                                <td>Condé Nast</td>
+                                                <td>May 2023</td>
+                                                <td>International fashion</td>
+                                            </tr>
+                                            <tr>
+                                                <td>10</td>
+                                                <td>W Korea</td>
+                                                <td>W Korea Magazine</td>
+                                                <td>Feb 2022</td>
+                                                <td>Korean lifestyle & fashion</td>
+                                            </tr>
+                                            <tr>
+                                                <td>11</td>
+                                                <td>Harper's Bazaar</td>
+                                                <td>Harper's Bazaar</td>
+                                                <td>May 2022</td>
+                                                <td>International fashion</td>
+                                            </tr>
+                                            <tr>
+                                                <td>12</td>
+                                                <td>National Geographic Kids Almanac</td>
+                                                <td>National Geographic Society</td>
+                                                <td>2024</td>
+                                                <td>Children's science & nature</td>
+                                            </tr>
+                                            <tr>
+                                                <td>13</td>
+                                                <td>Reader's Digest</td>
+                                                <td>Reader's Digest Association</td>
+                                                <td>2023</td>
+                                                <td>General interest</td>
+                                            </tr>
+                                            <tr>
+                                                <td>14</td>
+                                                <td>Cosmopolitan</td>
+                                                <td>Hearst Communications</td>
+                                                <td>2023</td>
+                                                <td>Women's lifestyle</td>
+                                            </tr>
+                                            <tr>
+                                                <td>15</td>
+                                                <td>Esquire</td>
+                                                <td>Hearst Communications</td>
+                                                <td>2023</td>
+                                                <td>Men's lifestyle & culture</td>
+                                            </tr>
+                                            <tr>
+                                                <td>16</td>
+                                                <td>Time Magazine</td>
+                                                <td>Time USA</td>
+                                                <td>2023</td>
+                                                <td>News & current affairs</td>
+                                            </tr>
+                                            <tr>
+                                                <td>17</td>
+                                                <td>Newsweek</td>
+                                                <td>Newsweek LLC</td>
+                                                <td>2023</td>
+                                                <td>News & current affairs</td>
+                                            </tr>
+                                            <tr>
+                                                <td>18</td>
+                                                <td>Sports Illustrated</td>
+                                                <td>Sports Illustrated</td>
+                                                <td>2023</td>
+                                                <td>Sports news & features</td>
+                                            </tr>
+                                            <tr>
+                                                <td>19</td>
+                                                <td>Entrepreneur</td>
+                                                <td>Entrepreneur Media</td>
+                                                <td>2023</td>
+                                                <td>Business & startups</td>
+                                            </tr>
+                                            <tr>
+                                                <td>20</td>
+                                                <td>Forbes</td>
+                                                <td>Forbes Media</td>
+                                                <td>2023</td>
+                                                <td>Business & finance</td>
+                                            </tr>
+                            <!-- Add all periodical entries here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+		
+		<!-- Filipiniana Accordion -->
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <span><i class="fas fa-leaf text-accent"></i> Filipiniana Collection</span>
+            </div>
+            <div class="accordion-content" style="max-height: 1000px;">
+                <div class="accordion-content-inner">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author(s)</th>
+                                <th>Year</th>
+                                <th>Publisher</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+<td>Insect Hag and Other Stories</td>
+                                    <td>Yvette Fernandez</td>
+                                    <td>2024</td>
+                                    <td>Anvil Publishing</td>
+                                    <td>Contemporary Filipino fiction</td>
+                                </tr>
+                                <tr>
+                                    <td>Mga Kuwento ni Lola Basyang (New Edition)</td>
+                                    <td>Severino Reyes (retold by various)</td>
+                                    <td>2023</td>
+                                    <td>Adarna House</td>
+                                    <td>Classic Filipino folktales</td>
+                                </tr>
+                                <tr>
+                                    <td>Mga Kwento ni Lola Basyang sa Modernong Panahon</td>
+                                    <td>Various Authors</td>
+                                    <td>2022</td>
+                                    <td>Lampara Books</td>
+                                    <td>Modern retelling of folklore</td>
+                                </tr>
+                                <tr>
+                                    <td>Bayaning Pilipino: Mga Kwento ng Kabayanihan</td>
+                                    <td>Various Authors</td>
+                                    <td>2021</td>
+                                    <td>Anvil Publishing</td>
+                                    <td>Stories of Filipino heroes</td>
+                                </tr>
+                                <tr>
+                                    <td>Tala: Mga Kuwento ng Kababaihan</td>
+                                    <td>Various Authors</td>
+                                    <td>2021</td>
+                                    <td>Ateneo de Manila Press</td>
+                                    <td>Filipino women's narratives</td>
+                                </tr>
+                                <tr>
+                                    <td>Mga Dula sa Panahon ng Pandemya</td>
+                                    <td>Various Authors</td>
+                                    <td>2020</td>
+                                    <td>University of the Philippines Press</td>
+                                    <td>Filipino plays on pandemic</td>
+                                </tr>
+                                <tr>
+                                    <td>Filipino Poetry Today</td>
+                                    <td>Various Filipino Poets</td>
+                                    <td>2020</td>
+                                    <td>De La Salle University Press</td>
+                                    <td>Contemporary poetry collection</td>
+                                </tr>                            <!-- Add all Filipiniana entries here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+		
+		
+		<!-- List of Books Accordion -->
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <span><i class="fas fa-book-open text-accent"></i> List of Books</span>
+            </div>
+            <div class="accordion-content" style="max-height: 1000px;">
+                <div class="accordion-content-inner">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>AUTHOR</th>
+                                <th>TITLE</th>
+                                <th>YEAR</th>
+                                <th>VOLUME</th>
+                                <th>SUBJECT CODE</th>
+                                <th>Yr & Sem</th>
+                                <th>No. of Copies</th>
+                                <th>Format</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Vistan, Deogracias</td>
+                                <td>The Filipino Entrepreneur</td>
+                                <td>2023</td>
+                                <td>1st Ed</td>
+                                <td>ECC 101</td>
+                                <td>11</td>
+                                <td>6</td>
+                                <td>Printed</td>
+                            </tr>
+							<tr>
+                                    <td>2</td>
+                                    <td>Feron, Jose</td>
+                                    <td>The Greatest Salesman I Know Does Not Sell</td>
+                                    <td>2022</td>
+                                    <td>1st Ed</td>
+                                    <td>ECC 101</td>
+                                    <td>11</td>
+                                    <td>6</td>
+                                    <td>Printed</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Smith, Mark</td>
+                                    <td>The Entrepreneur's Guide to the Art of War</td>
+                                    <td>2021</td>
+                                    <td>1st Ed</td>
+                                    <td>ECC 101</td>
+                                    <td>11</td>
+                                    <td>6</td>
+                                    <td>Printed</td>
+                                </tr>
+                                <!-- Add more rows as needed -->
+                                <tr>
+                                    <td>136</td>
+                                    <td>Garcia, M. L</td>
+                                    <td>The Self and Identity: A Multidisciplinary Approach</td>
+                                    <td>2021</td>
+                                    <td>1st Ed</td>
+                                    <td>GE1_UTS</td>
+                                    <td>11</td>
+                                    <td>10</td>
+                                    <td>Printed</td>
+                                </tr>
+                                <tr>
+                                    <td>137</td>
+                                    <td>Reyes, J. P</td>
+                                    <td>Understanding Human Behavior and the Self</td>
+                                    <td>2022</td>
+                                    <td>1st Ed</td>
+                                    <td>GE1_UTS</td>
+                                    <td>11</td>
+                                    <td>10</td>
+                                    <td>Printed</td>
+                                </tr>
+                            <!-- Add all book entries here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+		
+        </section>
+        
+
+
+        <section id="about" class="profile-section section">
+    <img src="logo.png" alt="Cieverose College Logo" class="profile-logo">
+    <div class="profile-content">
+        <h2>Why Choose Cieverose College, Inc.?</h2>
+        <p>We provide a nurturing environment that fosters academic excellence...</p>
+        
+        <div class="programs mt-lg">
+            <article class="program-card">
+                <div class="program-card-content">
+                    <h3><i class="fas fa-award text-accent"></i> Quality Education</h3>
+                    <p>Our curriculum is designed to meet industry standards while fostering critical thinking and practical skills.</p>
+                </div>
+            </article>
+            
+            <article class="program-card">
+                <div class="program-card-content">
+                    <h3><i class="fas fa-users text-accent"></i> Experienced Faculty</h3>
+                    <p>Learn from industry professionals and educators committed to your success.</p>
+                </div>
+            </article>
+            
+            <article class="program-card">
+                <div class="program-card-content">
+                    <h3><i class="fas fa-hands-helping text-accent"></i> Holistic Development</h3>
+                    <p>We nurture not just academic growth but also character, leadership, and life skills.</p>
+                </div>
+            </article>
+        </div>
+        
+        <a href="https://www.facebook.com/profile.php?id=100069140122435" class="profile-link" target="_blank" rel="noopener">
+            <i class="fab fa-facebook"></i> Visit Our Facebook Page
+        </a>
+    </div>
+</section>
+        
+        <section id="contact" class="section">
+            <h2 class="text-center">Contact Information</h2>
+            <p class="text-center mb-xl">We'd love to hear from you. Reach out for inquiries or visit our campus.</p>
+            
+            <div class="programs">
+                <article class="program-card">
+                    <div class="program-card-content">
+                        <h3><i class="fas fa-map-marker-alt text-accent"></i> Campus Address</h3>
+                        <address>
+                            <a href="https://maps.app.goo.gl/8PD8L7VCfyoL6Fca7" 
+                              target="_blank" 
+                              rel="noopener"
+                              id="directions-link">
+                                Lot 4 Block 51(1644) Ilang-Ilang Street<br>
+                                Camarin, Caloocan City
+                                <i class="fas fa-directions ml-2"></i>
+                            </a>
+                        </address>
+                    </div>
+                </article>
+                
+                <article class="program-card">
+                    <div class="program-card-content">
+                        <h3><i class="fas fa-phone-alt text-accent"></i> Contact Numbers</h3>
+                        <div class="contact-numbers">
+                            <div class="contact-item">
+                                <a href="tel:+639171485067" class="contact-link call">
+                                    <i class="fas fa-phone"></i> +63(917)148-5067
+                                </a><br>
+                                <a href="sms:+639171485067" class="contact-link message">
+                                    <i class="fas fa-comment-alt"></i> 
+                                </a>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <a href="tel:+639176769200" class="contact-link call">
+                                    <i class="fas fa-phone"></i> +63(917)676-9200
+                                </a><br>
+                                <a href="sms:+639176769200" class="contact-link message">
+                                    <i class="fas fa-comment-alt"></i> 
+                                </a>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <a href="tel:+639178322402" class="contact-link call">
+                                    <i class="fas fa-phone"></i> +63(917)832-2402
+                                </a><br>
+                                <a href="sms:+639178322402" class="contact-link message">
+                                    <i class="fas fa-comment-alt"></i> 
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="program-card">
+                    <div class="program-card-content">
+                        <h3><i class="fas fa-clock text-accent"></i> Office Hours</h3>
+                        <p>Monday to Friday: 8:00 AM - 5:00 PM</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+    
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>About Cieverose College, Inc.</h3>
+                <p>Providing quality education that combines academic excellence with practical skills development since 2010.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/profile.php?id=100069140122435" aria-label="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#welcome">Home</a></li>
+                    <li><a href="#programs">Programs</a></li>
+                    <li><a href="#library">Library</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Senior High School Strands</h3>
+                <ul>
+                    <li><a href="/">Information and Communication Technology</a></li>
+                    <li><a href="/">Home Economics</a></li>
+                    <li><a href="/">Humanities and Social Sciences</a></li>
+                    <li><a href="/">Accountancy, Business and Management</a></li>
+                    <li><a href="/">General Academic Strand</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Newsletter</h3>
+                <p>Subscribe to our newsletter for the latest updates and announcements.</p>
+                <!-- <form id="newsletter-form" action="https://formspree.io/f/mangahasjanjoshua@gmail.com" method="POST">
+                    <input type="email" name="email" placeholder="Your email address" required aria-label="Email address">
+                    <button type="submit">Subscribe</button>
+                    <input type="hidden" name="_subject" value="New newsletter subscriber">
+                    <input type="text" name="_gotcha" style="display:none">
+                </form> -->
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <div class="copyright-content">
+                <p>&copy; <span id="year"></span> Cieverose College, Incorporation. All rights reserved.</p>
+                
+                <img src="logo.png" 
+                    alt="Cieverose College Logo" 
+                    class="footer-logo">
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        
+		
+
+        //Accordion close all
+        document.addEventListener('DOMContentLoaded', function() {
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            const content = item.querySelector('.accordion-content');
+            
+            header.setAttribute('aria-expanded', 'false');
+            content.style.maxHeight = null; // Ensure all are closed
+            
+            header.addEventListener('click', function() {
+                const isOpening = !item.classList.contains('active');
+                
+                // Close all other accordions
+                if (isOpening) {
+                    document.querySelectorAll('.accordion-item.active').forEach(openItem => {
+                        openItem.classList.remove('active');
+                        openItem.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+                        openItem.querySelector('.accordion-content').style.maxHeight = null;
+                    });
+                }
+                
+                // Toggle current item
+                item.classList.toggle('active');
+                header.setAttribute('aria-expanded', item.classList.contains('active'));
+                content.style.maxHeight = item.classList.contains('active') ? content.scrollHeight + 'px' : null;
+            });
+        });
+    });
+
+
+
+
+		// Initialize Swiper carousels
+        const swipers = document.querySelectorAll('.swiper');
+        swipers.forEach(swiperEl => {
+            new Swiper(swiperEl, {
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+        });
+
+        // Collection tabs functionality
+        const collectionTabs = document.querySelectorAll('.collection-tab');
+        collectionTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelector('.collection-tab.active').classList.remove('active');
+                document.querySelector('.collection-content.active').classList.remove('active');
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Open first accordion by default
+        document.querySelector('.accordion-header').click();
+
+        // Enhanced directions link with geolocation
+        document.getElementById('directions-link').addEventListener('click', function(e) {
+            if (e.button === 0) {
+                e.preventDefault();
+                
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+                            window.open(
+                                `https://maps.app.goo.gl/8PD8L7VCfyoL6Fca7`,
+                                '_blank'
+                            );
+                        },
+                        function(error) {
+                            if (error.code !== error.PERMISSION_DENIED) {
+                                console.error("Geolocation error:", error);
+                            }
+                            window.open(this.href, '_blank');
+                        }
+                    );
+                } else {
+                    window.open(this.href, '_blank');
+                }
+            }
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const navUl = document.querySelector('nav ul');
+            navUl.classList.toggle('show');
+            this.setAttribute('aria-expanded', navUl.classList.contains('show'));
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.querySelector('nav ul.show');
+                    if (mobileMenu) {
+                        mobileMenu.classList.remove('show');
+                        document.querySelector('.mobile-menu-btn').setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+        });
+
+        // Set copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Add animation class when elements come into view
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.program-card, .section').forEach(section => {
+            observer.observe(section);
+        });
+		
+		
+        
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize accordions - don't open first one by default
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            const content = item.querySelector('.accordion-content');
+            
+            // Add ARIA attributes
+            header.setAttribute('aria-expanded', 'false');
+            header.setAttribute('aria-controls', `accordion-content-${item.dataset.index}`);
+            content.setAttribute('id', `accordion-content-${item.dataset.index}`);
+            
+            // Click handler
+            header.addEventListener('click', function() {
+                toggleAccordion(item);
+            });
+            
+            // Keyboard support
+            header.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleAccordion(item);
+                }
+                
+                // Arrow key navigation
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const direction = e.key === 'ArrowDown' ? 1 : -1;
+                    const nextIndex = parseInt(item.dataset.index) + direction;
+                    
+                    if (nextIndex >= 0 && nextIndex < accordionItems.length) {
+                        const nextItem = document.querySelector(`.accordion-item[data-index="${nextIndex}"]`);
+                        nextItem.querySelector('.accordion-header').focus();
+                    }
+                }
+            });
+        });
+        
+        // Remove the automatic opening of first accordion
+        // This is the key change - we're removing the code that opened the first accordion
+        
+        function toggleAccordion(item) {
+            const isOpening = !item.classList.contains('active');
+            const header = item.querySelector('.accordion-header');
+            const content = item.querySelector('.accordion-content');
+            
+            // Toggle current item
+            item.classList.toggle('active');
+            header.setAttribute('aria-expanded', item.classList.contains('active'));
+            
+            // Smooth scrolling to opened accordion (for better UX)
+            if (isOpening) {
+                setTimeout(() => {
+                    item.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 100);
+            }
+        }
+        
+        // Add data-index attributes if not present
+        document.querySelectorAll('.accordion-item').forEach((item, index) => {
+            if (!item.dataset.index) {
+                item.dataset.index = index;
+            }
+        });
+    });
+		
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const accordionItem = header.parentElement;
+                const accordionContent = header.nextElementSibling;
+                
+                if (header.classList.contains('active')) {
+                    header.classList.remove('active');
+                    accordionContent.style.maxHeight = null;
+                } else {
+                    // Close all other accordion items
+                    document.querySelectorAll('.accordion-header').forEach(h => {
+                        if (h !== header && h.classList.contains('active')) {
+                            h.classList.remove('active');
+                            h.nextElementSibling.style.maxHeight = null;
+                        }
+                    });
+                    
+                    header.classList.add('active');
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + 'px';
+                }
+            });
+        });
+
+
+    </script>
+</body>
 </html>
