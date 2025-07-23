@@ -973,7 +973,8 @@
 
 
 
-        
+       
+
 /* ===== Enhanced Carousel Styles ===== */
 .event-carousel {
     position: relative;
@@ -1078,10 +1079,12 @@
     background: var(--secondary-color);
     transform: scale(1.2);
 }
-
-
-       
         
+
+
+
+
+
 /* Adjust accordion styles */
 .accordion {
     width: 100%;
