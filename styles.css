@@ -969,13 +969,119 @@
             display: block;
             animation: fadeIn 0.5s ease;
         }
-/* Remove carousel styles */
-.event-carousel, .carousel-container, .carousel-slide, 
-.carousel-caption, .carousel-nav, .carousel-btn, 
-.carousel-indicators {
-    display: none;
+
+
+
+
+        
+/* ===== Enhanced Carousel Styles ===== */
+.event-carousel {
+    position: relative;
+    max-width: 1000px;
+    margin: var(--space-xl) auto;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    aspect-ratio: 16/9;
 }
 
+.carousel-container {
+    display: flex;
+    transition: transform 0.5s ease;
+    height: 100%;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    position: relative;
+    height: 100%;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+    padding: var(--space-lg);
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.carousel-slide:hover .carousel-caption {
+    transform: translateY(0);
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    z-index: 10;
+    padding: 0 var(--space-md);
+}
+
+.carousel-btn {
+    background: rgba(255,255,255,0.3);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn:hover {
+    background: rgba(255,255,255,0.5);
+    transform: scale(1.1);
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: var(--space-md);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--space-sm);
+    z-index: 10;
+}
+
+.carousel-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+    padding: 0;
+}
+
+.carousel-indicator.active {
+    background: var(--secondary-color);
+    transform: scale(1.2);
+}
+
+
+       
+        
 /* Adjust accordion styles */
 .accordion {
     width: 100%;
