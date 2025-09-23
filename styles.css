@@ -282,6 +282,7 @@ nav ul li a.active {
 .cta-button.secondary {
     background-color: transparent;
     border: 2px solid var(--white);
+	color: white;
 }
 
 .cta-button.secondary:hover {
