@@ -1,392 +1,918 @@
-// Calendar functionality
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize calendar with current month
-    let currentDate = new Date();
-    let currentMonth = currentDate.getMonth();
-    let currentYear = currentDate.getFullYear();
+// ===== DOM ELEMENTS =====
+const DOM = {
+    mobileMenuBtn: document.getElementById('mobile-menu-btn'),
+    navMenu: document.getElementById('nav-menu'),
+    backToTopBtn: document.getElementById('back-to-top'),
+    searchBtn: document.getElementById('search-btn'),
+    searchModal: document.getElementById('search-modal'),
+    searchModalClose: document.getElementById('search-modal-close'),
+    calendarMonthYear: document.getElementById('current-month-year'),
+    calendarDays: document.getElementById('calendar-days'),
+    eventTabs: document.querySelectorAll('.event-tab'),
+    eventContents: document.querySelectorAll('.event-content'),
+    accordionHeaders: document.querySelectorAll('.accordion-header'),
+    prevMonthBtn: document.getElementById('prev-month'),
+    nextMonthBtn: document.getElementById('next-month')
+};
+
+
+
+// ===== ACCORDION SYSTEM =====
+function initializeAccordions() {
+    DOM.accordionHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            if (!content) return;
+            
+            const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+            
+            // Close all accordions in the same container first
+            const parent = header.closest('.accordion');
+            if (parent) {
+                parent.querySelectorAll('.accordion-content').forEach(item => {
+                    item.style.maxHeight = '0px';
+                });
+                parent.querySelectorAll('.accordion-header').forEach(header => {
+                    header.classList.remove('active');
+                });
+            }
+            
+            // Toggle the clicked accordion
+            if (!isOpen) {
+                content.style.maxHeight = content.scrollHeight + "px";
+                header.classList.add('active');
+            } else {
+                content.style.maxHeight = '0px';
+                header.classList.remove('active');
+            }
+        });
+    });
+}
+
+
+
+// ===== CONFIGURATION =====
+const CONFIG = {
+    autoSlideInterval: 5000,
+    minSwipeDistance: 50,
+    scrollOffset: 100
+};
+
+// ===== STATE MANAGEMENT =====
+const State = {
+    currentDate: new Date(),
+    carouselInstances: new Map(),
+    isMobileMenuOpen: false,
+    activeEventTab: 'js-prom'
+};
+
+// ===== LOADING ANIMATION =====
+function initializeLoading() {
+    window.addEventListener('load', () => {
+        const loadingOverlay = document.querySelector('.loading-overlay');
+        if (loadingOverlay) {
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+                setTimeout(() => loadingOverlay.remove(), 500);
+            }, 1000);
+        }
+    });
+}
+
+// ===== MOBILE MENU MANAGEMENT =====
+function initializeMobileMenu() {
+    if (!DOM.mobileMenuBtn || !DOM.navMenu) return;
     
-    // School events data (you can expand this)
-    const schoolEvents = {
-        '2025-7-15': 'New Student Orientation',
-        '2025-7-20': 'First Day of Classes',
-        '2025-8-21': 'Midterm Examinations',
-        '2025-9-25': 'Foundation Day',
-        '2025-10-15': 'Final Examinations',
-        '2025-10-16': 'Final Examinations',
-        '2025-10-17': 'Final Examinations',
-        '2025-10-18': 'Final Examinations'
+    DOM.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    
+    // Close menu when clicking on links
+    document.querySelectorAll('nav ul li a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (State.isMobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (State.isMobileMenuOpen && 
+            !DOM.navMenu.contains(e.target) && 
+            !DOM.mobileMenuBtn.contains(e.target)) {
+            closeMobileMenu();
+        }
+    });
+}
+
+function toggleMobileMenu() {
+    State.isMobileMenuOpen = !State.isMobileMenuOpen;
+    DOM.navMenu.classList.toggle('show');
+    DOM.mobileMenuBtn.innerHTML = State.isMobileMenuOpen ? 
+        '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    DOM.mobileMenuBtn.setAttribute('aria-expanded', State.isMobileMenuOpen);
+}
+
+function closeMobileMenu() {
+    State.isMobileMenuOpen = false;
+    DOM.navMenu.classList.remove('show');
+    DOM.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    DOM.mobileMenuBtn.setAttribute('aria-expanded', 'false');
+}
+
+// ===== SCROLL MANAGEMENT =====
+function initializeScrollHandlers() {
+    // Back to top button
+    if (DOM.backToTopBtn) {
+        window.addEventListener('scroll', throttle(() => {
+            const isVisible = window.scrollY > 500;
+            DOM.backToTopBtn.classList.toggle('visible', isVisible);
+        }, 100));
+
+        DOM.backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            e.preventDefault();
+            scrollToSection(targetId);
+            
+            if (State.isMobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+    });
+}
+
+function scrollToSection(sectionId) {
+    const targetElement = document.querySelector(sectionId);
+    if (targetElement) {
+        const nav = document.querySelector('nav');
+        const navHeight = nav ? nav.offsetHeight : 0;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
+}
+
+// ===== SEARCH MODAL =====
+function initializeSearchModal() {
+    if (!DOM.searchBtn || !DOM.searchModal || !DOM.searchModalClose) return;
+    
+    DOM.searchBtn.addEventListener('click', openSearchModal);
+    DOM.searchModalClose.addEventListener('click', closeSearchModal);
+    
+    DOM.searchModal.addEventListener('click', (e) => {
+        if (e.target === DOM.searchModal) {
+            closeSearchModal();
+        }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && DOM.searchModal.classList.contains('active')) {
+            closeSearchModal();
+        }
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', throttle(performSearch, 300));
+    }
+}
+
+function openSearchModal() {
+    DOM.searchModal.classList.add('active');
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) searchInput.focus();
+}
+
+function closeSearchModal() {
+    DOM.searchModal.classList.remove('active');
+}
+
+function performSearch(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    if (searchTerm.length < 2) return;
+    
+    // Implement search logic here
+    console.log('Searching for:', searchTerm);
+}
+
+// ===== CALENDAR FUNCTIONALITY =====
+const ACADEMIC_EVENTS = {
+    '2025-7-15': { title: 'First Day of Classes', type: 'academic' },
+    '2025-8-15': { title: 'Midterm Examinations', type: 'exam' },
+    '2025-8-21': { title: 'National Heroes Day', type: 'holiday' },
+    '2025-9-1': { title: 'Buwan ng Wika Celebration', type: 'event' },
+    '2025-9-15': { title: 'Preliminary Examinations', type: 'exam' },
+    '2025-10-6': { title: 'Teachers Day', type: 'event' },
+    '2025-11-30': { title: 'Bonifacio Day', type: 'holiday' },
+    '2025-12-25': { title: 'Christmas Day', type: 'holiday' },
+    '2025-11-1': { title: 'All Saints Day', type: 'holiday' },
+    '2026-1-8': { title: 'Feast of the Immaculate Conception of Mary', type: 'holiday' },
+    '2025-10-31': { title: 'All Saints Day Eve', type: 'holiday' },
+    '2025-7-27': { title: 'Proclamation No. 729', type: 'holiday' },
+    '2025-7-21': { title: 'Ninoy Aquino Day', type: 'holiday' },
+    '2025-10-27': { title: 'Final Examinations', type: 'exam' },
+    '2025-12-15': { title: 'Christmas Program', type: 'event' },
+    '2025-12-20': { title: 'Start of Christmas Break', type: 'holiday' },
+    '2026-1-5': { title: 'Classes Resume', type: 'academic' },
+    '2026-4-18': { title: 'Good Friday', type: 'holiday' },
+    '2026-4-17': { title: 'Maundy Thursday', type: 'holiday' },
+    '2026-4-9': { title: 'Araw ng Kagitingan', type: 'holiday' },
+    '2026-2-14': { title: 'Valentines Day Celebration', type: 'event' },
+    '2026-2-25': { title: 'EDSA Revolution Anniversary', type: 'holiday' },
+    '2026-4-1': { title: 'Eid\'l Fitr (Feast of Ramadhan)', type: 'holiday' },
+    '2026-1-1': { title: 'New Year\'s Day', type: 'holiday' }
+};
+
+function initializeCalendar() {
+    if (!DOM.prevMonthBtn || !DOM.nextMonthBtn || !DOM.calendarMonthYear || !DOM.calendarDays) return;
+    
+    DOM.prevMonthBtn.addEventListener('click', () => navigateCalendar(-1));
+    DOM.nextMonthBtn.addEventListener('click', () => navigateCalendar(1));
+    
+    renderCalendar();
+    addQuickMonthNavigation();
+    updateSelectValues();
+}
+
+function navigateCalendar(direction) {
+    State.currentDate.setMonth(State.currentDate.getMonth() + direction);
+    renderCalendar();
+    updateSelectValues();
+}
+
+function renderCalendar() {
+    const year = State.currentDate.getFullYear();
+    const month = State.currentDate.getMonth();
+    const today = new Date();
+    
+    // Update month/year display
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+    DOM.calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
+    
+    // Clear previous days
+    DOM.calendarDays.innerHTML = '';
+    
+    // Get calendar data
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    // Add day headers
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    dayNames.forEach(day => {
+        const dayElement = createElement('div', 'calendar-day-header', day);
+        DOM.calendarDays.appendChild(dayElement);
+    });
+    
+    // Add empty cells for days before first day of month
+    for (let i = 0; i < firstDay; i++) {
+        DOM.calendarDays.appendChild(createElement('div', 'calendar-day empty'));
+    }
+    
+    // Add days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateKey = `${year}-${month + 1}-${day}`;
+        const eventData = ACADEMIC_EVENTS[dateKey];
+        const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+        
+        const dayElement = createCalendarDay(day, eventData, isToday, dateKey);
+        DOM.calendarDays.appendChild(dayElement);
+    }
+}
+
+function createCalendarDay(day, eventData, isToday, dateKey) {
+    const dayElement = createElement('div', 'calendar-day');
+    dayElement.innerHTML = `<span class="calendar-date">${day}</span>`;
+    
+    // Add today class
+    if (isToday) dayElement.classList.add('today');
+    
+    // Add event data
+    if (eventData) {
+        dayElement.classList.add('event', eventData.type);
+        dayElement.innerHTML += `<div class="calendar-event">${eventData.title}</div>`;
+        dayElement.setAttribute('data-tooltip', eventData.title);
+        
+        // Add event interactions
+        dayElement.addEventListener('mouseenter', showEventTooltip);
+        dayElement.addEventListener('mouseleave', hideEventTooltip);
+    }
+    
+    // Add click handler
+    dayElement.addEventListener('click', () => selectCalendarDay(dayElement, day, eventData));
+    
+    return dayElement;
+}
+
+function selectCalendarDay(dayElement, day, eventData) {
+    if (dayElement.classList.contains('empty')) return;
+    
+    // Remove previous selection
+    document.querySelectorAll('.calendar-day.selected').forEach(el => {
+        el.classList.remove('selected');
+    });
+    
+    // Add new selection
+    dayElement.classList.add('selected');
+    updateEventsList(day, eventData);
+}
+
+function updateEventsList(day, eventData) {
+    const eventsList = document.getElementById('key-dates-list');
+    if (!eventsList) return;
+    
+    eventsList.innerHTML = '';
+    
+    const li = createElement('li');
+    if (eventData) {
+        li.innerHTML = `
+            <span class="date-badge">${day}</span>
+            <div class="event-details">
+                <div class="event-title">${eventData.title}</div>
+                <div class="event-type ${eventData.type}">
+                    ${eventData.type.charAt(0).toUpperCase() + eventData.type.slice(1)}
+                </div>
+            </div>
+        `;
+    } else {
+        li.innerHTML = `
+            <div class="event-details">
+                <div class="event-title">No events scheduled for this date</div>
+            </div>
+        `;
+    }
+    
+    eventsList.appendChild(li);
+}
+
+// Tooltip functions
+function showEventTooltip() {
+    const tooltipText = this.getAttribute('data-tooltip');
+    if (!tooltipText) return;
+    
+    const tooltip = createElement('div', 'event-tooltip', tooltipText);
+    document.body.appendChild(tooltip);
+    
+    const rect = this.getBoundingClientRect();
+    tooltip.style.left = `${rect.left + window.scrollX}px`;
+    tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 10}px`;
+}
+
+function hideEventTooltip() {
+    const tooltip = document.querySelector('.event-tooltip');
+    if (tooltip) tooltip.remove();
+}
+
+// Quick navigation
+function addQuickMonthNavigation() {
+    const calendarHeader = document.querySelector('.calendar-header');
+    if (!calendarHeader || document.getElementById('month-select')) return;
+    
+    const quickNav = createElement('div', 'calendar-quick-nav');
+    quickNav.innerHTML = `
+        <select id="month-select" aria-label="Select month">
+            ${[...Array(12).keys()].map(i => 
+                `<option value="${i}">${new Date(2000, i).toLocaleString('default', {month: 'long'})}</option>`
+            ).join('')}
+        </select>
+        <select id="year-select" aria-label="Select year">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+        </select>
+    `;
+    
+    calendarHeader.appendChild(quickNav);
+    
+    const monthSelect = document.getElementById('month-select');
+    const yearSelect = document.getElementById('year-select');
+    
+    if (monthSelect) {
+        monthSelect.addEventListener('change', (e) => {
+            State.currentDate.setMonth(parseInt(e.target.value));
+            renderCalendar();
+            updateSelectValues();
+        });
+    }
+    
+    if (yearSelect) {
+        yearSelect.addEventListener('change', (e) => {
+            State.currentDate.setFullYear(parseInt(e.target.value));
+            renderCalendar();
+            updateSelectValues();
+        });
+    }
+}
+
+function updateSelectValues() {
+    const monthSelect = document.getElementById('month-select');
+    const yearSelect = document.getElementById('year-select');
+    
+    if (monthSelect) monthSelect.value = State.currentDate.getMonth();
+    if (yearSelect) yearSelect.value = State.currentDate.getFullYear();
+}
+
+// ===== EVENT TABS =====
+function initializeEventTabs() {
+    DOM.eventTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.getAttribute('data-tab');
+            switchEventTab(tabId);
+        });
+    });
+}
+
+function switchEventTab(tabId) {
+    // Update tabs
+    DOM.eventTabs.forEach(t => t.classList.remove('active'));
+    DOM.eventContents.forEach(c => c.classList.remove('active'));
+    
+    // Activate selected tab
+    const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+    const activeContent = document.getElementById(tabId);
+    
+    if (activeTab && activeContent) {
+        activeTab.classList.add('active');
+        activeContent.classList.add('active');
+        State.activeEventTab = tabId;
+        
+        // Initialize carousel for active tab
+        const activeCarousel = activeContent.querySelector('.event-carousel');
+        if (activeCarousel) {
+            initializeCarousel(activeCarousel);
+        }
+    }
+}
+
+// ===== CAROUSEL SYSTEM =====
+function initializeCarousels() {
+    document.querySelectorAll('.event-carousel').forEach(carousel => {
+        initializeCarousel(carousel);
+    });
+}
+
+function initializeCarousel(carousel) {
+    const container = carousel.querySelector('.carousel-container');
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    const indicators = carousel.querySelectorAll('.carousel-indicator');
+    const prevBtn = carousel.querySelector('.carousel-prev');
+    const nextBtn = carousel.querySelector('.carousel-next');
+    
+    if (!container || slides.length === 0) return;
+    
+    const carouselState = {
+        currentSlide: 0,
+        autoSlideInterval: null,
+        isPaused: false
     };
     
-    // Generate calendar
-    function generateCalendar(month, year) {
-        const calendarGrid = document.getElementById('calendar-grid');
-        const monthYearDisplay = document.getElementById('current-month-year');
+    State.carouselInstances.set(carousel, carouselState);
+    
+    function showSlide(index) {
+        if (index >= slides.length) index = 0;
+        if (index < 0) index = slides.length - 1;
         
-        // Clear previous calendar
-        calendarGrid.innerHTML = '';
+        carouselState.currentSlide = index;
         
-        // Set month and year display
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                          'July', 'August', 'September', 'October', 'November', 'December'];
-        monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
-        
-        // Create day headers
-        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        dayNames.forEach(day => {
-            const dayHeader = document.createElement('div');
-            dayHeader.className = 'calendar-day-header';
-            dayHeader.textContent = day;
-            calendarGrid.appendChild(dayHeader);
+        // Update scroll position
+        container.scrollTo({
+            left: container.clientWidth * index,
+            behavior: 'smooth'
         });
         
-        // Get first day of month and total days
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        // Update indicators and slides
+        indicators.forEach((indicator, i) => {
+            indicator.classList.toggle('active', i === index);
+        });
         
-        // Add empty cells for days before the first day of the month
-        for (let i = 0; i < firstDay; i++) {
-            const emptyDay = document.createElement('div');
-            emptyDay.className = 'calendar-day empty';
-            calendarGrid.appendChild(emptyDay);
-        }
-        
-        // Add days of the month
-        for (let day = 1; day <= daysInMonth; day++) {
-            const dayElement = document.createElement('div');
-            dayElement.className = 'calendar-day';
-            
-            const dateElement = document.createElement('div');
-            dateElement.className = 'calendar-date';
-            dateElement.textContent = day;
-            dayElement.appendChild(dateElement);
-            
-            // Check if this day has an event
-            const dateKey = `${year}-${month + 1}-${day}`;
-            if (schoolEvents[dateKey]) {
-                const eventElement = document.createElement('span');
-                eventElement.className = 'calendar-event';
-                eventElement.textContent = schoolEvents[dateKey];
-                dayElement.appendChild(eventElement);
-            }
-            
-            // Highlight current day
-            if (day === currentDate.getDate() && month === currentDate.getMonth() && year === currentDate.getFullYear()) {
-                dayElement.style.backgroundColor = 'rgba(249, 200, 14, 0.2)';
-                dayElement.style.border = '2px solid var(--secondary-color)';
-            }
-            
-            calendarGrid.appendChild(dayElement);
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === index);
+        });
+    }
+    
+    function nextSlide() {
+        showSlide(carouselState.currentSlide + 1);
+    }
+    
+    function prevSlide() {
+        showSlide(carouselState.currentSlide - 1);
+    }
+    
+    function startAutoSlide() {
+        stopAutoSlide();
+        if (!carouselState.isPaused) {
+            carouselState.autoSlideInterval = setInterval(nextSlide, CONFIG.autoSlideInterval);
         }
     }
     
-    // Navigation buttons
-    document.getElementById('prev-month').addEventListener('click', function() {
-        currentMonth--;
-        if (currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        }
-        generateCalendar(currentMonth, currentYear);
+    function stopAutoSlide() {
+        clearInterval(carouselState.autoSlideInterval);
+    }
+    
+    // Event listeners
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            prevSlide();
+            startAutoSlide();
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            nextSlide();
+            startAutoSlide();
+        });
+    }
+    
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            stopAutoSlide();
+            showSlide(index);
+            startAutoSlide();
+        });
     });
     
-    document.getElementById('next-month').addEventListener('click', function() {
-        currentMonth++;
-        if (currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
+    // Touch/swipe support
+    let touchStartX = 0;
+    
+    container.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+        stopAutoSlide();
+    }, { passive: true });
+    
+    container.addEventListener('touchend', e => {
+        const touchEndX = e.changedTouches[0].screenX;
+        const distance = touchStartX - touchEndX;
+        
+        if (Math.abs(distance) >= CONFIG.minSwipeDistance) {
+            distance > 0 ? nextSlide() : prevSlide();
         }
-        generateCalendar(currentMonth, currentYear);
+        
+        startAutoSlide();
+    }, { passive: true });
+    
+    // Pause on hover
+    container.addEventListener('mouseenter', () => {
+        carouselState.isPaused = true;
+        stopAutoSlide();
     });
     
-    // Initialize calendar
-    generateCalendar(currentMonth, currentYear);
+    container.addEventListener('mouseleave', () => {
+        carouselState.isPaused = false;
+        startAutoSlide();
+    });
     
-    // You can add more events to the calendar by expanding the schoolEvents object
-});
+    // Initialize
+    showSlide(0);
+    startAutoSlide();
+}
 
 
-        // Enhanced Carousel Implementation
-        class EnhancedCarousel {
-          constructor(element) {
-            this.carousel = element;
-            this.container = this.carousel.querySelector('.carousel-container');
-            this.slides = this.carousel.querySelectorAll('.carousel-slide');
-            this.prevBtn = this.carousel.querySelector('.prev-btn');
-            this.nextBtn = this.carousel.querySelector('.next-btn');
-            this.indicators = this.carousel.querySelectorAll('.carousel-indicator');
+// ===== DYNAMIC CONTENT =====
+const CONTENT_DATA = {
+    announcements: [
+        { date: '2025-07-01', title: 'Enrollment for SY 2025-2026', content: 'Enrollment for the new school year starts on July 1, 2025. Please complete your requirements early.' },
+        { date: '2025-07-15', title: 'First Day of Classes', content: 'Classes for SY 2025-2026 begin on July 15, 2025. All students are expected to attend.' },
+        { date: '2025-08-15', title: 'Midterm Examinations', content: 'Midterm examinations will be held from August 15-20, 2025. Please prepare accordingly.' }
+    ],
+    events: [
+        { date: '2025-08-21', title: 'National Heroes Day', time: 'Whole Day', location: 'No Classes' },
+        { date: '2025-09-01', title: 'Buwan ng Wika Celebration', time: '8:00 AM - 3:00 PM', location: 'School Grounds' },
+        { date: '2025-10-06', title: 'Teachers Day Celebration', time: '8:00 AM - 12:00 PM', location: 'School Auditorium' }
+    ],
+    news: [
+        { title: 'Sportsfest 2025 Champions', excerpt: 'Congratulations to the Blue Team for winning this years Sportsfest competition.', image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80' },
+        { title: 'Science Fair Winners', excerpt: 'Our students won 3 awards at the regional science fair competition.', image: 'https://images.unsplash.com/photo-1581094288338-231b058b38b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80' }
+    ]
+};
+
+function populateDynamicContent() {
+    populateAnnouncements();
+    populateEvents();
+    populateNews();
+}
+
+function populateAnnouncements() {
+    const container = document.getElementById('announcements-container');
+    if (!container) return;
+    
+    CONTENT_DATA.announcements.forEach(item => {
+        const element = createElement('div', 'announcement-item');
+        element.innerHTML = `
+            <div class="announcement-date">${formatDate(item.date)}</div>
+            <div class="announcement-title">${item.title}</div>
+            <div>${item.content}</div>
+        `;
+        container.appendChild(element);
+    });
+}
+
+function populateEvents() {
+    const container = document.getElementById('events-container');
+    if (!container) return;
+    
+    CONTENT_DATA.events.forEach(event => {
+        const eventDate = new Date(event.date);
+        const element = createElement('div', 'event-item');
+        element.innerHTML = `
+            <div class="event-date">
+                <span class="event-day">${eventDate.getDate()}</span>
+                <span class="event-month">${eventDate.toLocaleString('default', { month: 'short' })}</span>
+            </div>
+            <div class="event-details">
+                <div class="event-title">${event.title}</div>
+                <div class="event-time">${event.time}</div>
+                <div class="event-location">${event.location}</div>
+            </div>
+        `;
+        container.appendChild(element);
+    });
+}
+
+function populateNews() {
+    const container = document.getElementById('news-container');
+    if (!container) return;
+    
+    CONTENT_DATA.news.forEach(newsItem => {
+        const element = createElement('div', 'news-item');
+        element.innerHTML = `
+            <img src="${newsItem.image}" alt="${newsItem.title}" class="news-image" loading="lazy">
+            <div class="news-title">${newsItem.title}</div>
+            <div class="news-excerpt">${newsItem.excerpt}</div>
+        `;
+        container.appendChild(element);
+    });
+}
+
+function formatDate(dateString) {
+    return new Date(dateString).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+}
+
+// ===== QUICK ACTIONS =====
+function initializeQuickActions() {
+    document.querySelectorAll('.quick-action-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.id === 'search-btn') return;
             
-            this.currentIndex = 0;
-            this.totalSlides = this.slides.length;
-            this.autoRotateInterval = null;
-            this.rotationSpeed = 5000; // 5 seconds
-            
-            this.init();
-          }
-          
-          init() {
-            // Set up event listeners
-            this.nextBtn.addEventListener('click', () => this.nextSlide());
-            this.prevBtn.addEventListener('click', () => this.prevSlide());
-            
-            // Indicator events
-            this.indicators.forEach((indicator, index) => {
-              indicator.addEventListener('click', () => this.goToSlide(index));
-            });
-            
-            // Keyboard navigation
-            this.carousel.addEventListener('keydown', (e) => {
-              if (e.key === 'ArrowRight') this.nextSlide();
-              if (e.key === 'ArrowLeft') this.prevSlide();
-            });
-            
-            // Touch events for mobile
-            let touchStartX = 0;
-            let touchEndX = 0;
-            
-            this.container.addEventListener('touchstart', (e) => {
-              touchStartX = e.changedTouches[0].screenX;
-            }, {passive: true});
-            
-            this.container.addEventListener('touchend', (e) => {
-              touchEndX = e.changedTouches[0].screenX;
-              this.handleSwipe();
-            }, {passive: true});
-            
-            // Start auto-rotation
-            this.startAutoRotation();
-            
-            // Pause on hover
-            this.carousel.addEventListener('mouseenter', () => this.pauseAutoRotation());
-            this.carousel.addEventListener('mouseleave', () => this.startAutoRotation());
-            
-            // Focus management for accessibility
-            this.carousel.addEventListener('focusin', () => this.pauseAutoRotation());
-            this.carousel.addEventListener('focusout', () => this.startAutoRotation());
-            
-            // Initial update
-            this.updateCarousel();
-          }
-          
-          updateCarousel() {
-            // Smooth transition
-            this.container.style.transition = 'transform 0.5s ease';
-            this.container.style.transform = `translateX(-${this.currentIndex * 100}%)`;
-            
-            // Update indicators
-            this.indicators.forEach((indicator, index) => {
-              indicator.classList.toggle('active', index === this.currentIndex);
-              indicator.setAttribute('aria-label', 
-                `Slide ${index + 1} of ${this.totalSlides} ${index === this.currentIndex ? '(Current)' : ''}`);
-            });
-            
-            // Update ARIA live region for screen readers
-            const currentSlide = this.slides[this.currentIndex];
-            const caption = currentSlide.querySelector('.carousel-caption');
-            if (caption) {
-              caption.setAttribute('aria-live', 'polite');
+            if (this.querySelector('.fa-calendar')) {
+                scrollToSection('#calendar');
+            } else if (this.querySelector('.fa-envelope')) {
+                scrollToSection('#contact');
             }
-            
-            // Focus management for accessibility
-            this.slides.forEach(slide => slide.setAttribute('aria-hidden', 'true'));
-            this.slides[this.currentIndex].setAttribute('aria-hidden', 'false');
-          }
-          
-          nextSlide() {
-            this.currentIndex = (this.currentIndex + 1) % this.totalSlides;
-            this.updateCarousel();
-            this.resetAutoRotation();
-          }
-          
-          prevSlide() {
-            this.currentIndex = (this.currentIndex - 1 + this.totalSlides) % this.totalSlides;
-            this.updateCarousel();
-            this.resetAutoRotation();
-          }
-          
-          goToSlide(index) {
-            this.currentIndex = index;
-            this.updateCarousel();
-            this.resetAutoRotation();
-          }
-          
-          handleSwipe() {
-            const threshold = 50; // Minimum swipe distance
-            
-            if (touchStartX - touchEndX > threshold) {
-              this.nextSlide();
-            } else if (touchEndX - touchStartX > threshold) {
-              this.prevSlide();
-            }
-          }
-          
-          startAutoRotation() {
-            if (this.autoRotateInterval) return;
-            this.autoRotateInterval = setInterval(() => this.nextSlide(), this.rotationSpeed);
-          }
-          
-          pauseAutoRotation() {
-            clearInterval(this.autoRotateInterval);
-            this.autoRotateInterval = null;
-          }
-          
-          resetAutoRotation() {
-            this.pauseAutoRotation();
-            this.startAutoRotation();
-          }
+        });
+    });
+}
+
+// ===== UTILITY FUNCTIONS =====
+function createElement(tag, className = '', content = '') {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (content) element.textContent = content;
+    return element;
+}
+
+function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
         }
+    };
+}
 
-        // Initialize all carousels
-        document.querySelectorAll('.event-carousel').forEach(carousel => {
-          new EnhancedCarousel(carousel);
+// ===== ACCESSIBILITY ENHANCEMENTS =====
+function enhanceAccessibility() {
+    // Add skip to content functionality
+    const skipLink = document.querySelector('.skip-link');
+    if (skipLink) {
+        skipLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) mainContent.focus();
         });
-        // Carousel functionality
-        function setupCarousel(carousel) {
-            const container = carousel.querySelector('.carousel-container');
-            const slides = carousel.querySelectorAll('.carousel-slide');
-            const prevBtn = carousel.querySelector('.prev-btn');
-            const nextBtn = carousel.querySelector('.next-btn');
-            const indicators = carousel.querySelectorAll('.carousel-indicator');
-            
-            let currentIndex = 0;
-            const totalSlides = slides.length;
-            
-            function updateCarousel() {
-                container.style.transform = `translateX(-${currentIndex * 100}%)`;
-                
-                // Update indicators
-                indicators.forEach((indicator, index) => {
-                    indicator.classList.toggle('active', index === currentIndex);
-                });
-            }
-            
-            function nextSlide() {
-                currentIndex = (currentIndex + 1) % totalSlides;
-                updateCarousel();
-            }
-            
-            function prevSlide() {
-                currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-                updateCarousel();
-            }
-            
-            // Button events
-            nextBtn.addEventListener('click', nextSlide);
-            prevBtn.addEventListener('click', prevSlide);
-            
-            // Indicator events
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => {
-                    currentIndex = index;
-                    updateCarousel();
-                });
-            });
-            
-            // Auto-rotate (optional)
-            let interval = setInterval(nextSlide, 5000);
-            
-            carousel.addEventListener('mouseenter', () => clearInterval(interval));
-            carousel.addEventListener('mouseleave', () => {
-                interval = setInterval(nextSlide, 5000);
-            });
+    }
+    
+    // Improve keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            document.body.classList.add('keyboard-navigation');
         }
+    });
+    
+    document.addEventListener('mousedown', () => {
+        document.body.classList.remove('keyboard-navigation');
+    });
+}
 
-        // Initialize all carousels
-        document.querySelectorAll('.event-carousel').forEach(setupCarousel);
-
-        // Event tabs functionality
-        const eventTabs = document.querySelectorAll('.event-tab');
-        eventTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs and contents
-                document.querySelector('.event-tab.active').classList.remove('active');
-                document.querySelector('.event-content.active').classList.remove('active');
-                
-                // Add active class to clicked tab and corresponding content
-                tab.classList.add('active');
-                const tabId = tab.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-        // Enhanced directions link with geolocation
-        document.getElementById('directions-link').addEventListener('click', function(e) {
-            // Only intercept if this is the main click (not middle mouse button, etc.)
-            if (e.button === 0) {
-                e.preventDefault();
-                
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        function(position) {
-                            // User granted permission - use their location
-                            const lat = position.coords.latitude;
-                            const lng = position.coords.longitude;
-                            window.open(
-                                `https://maps.app.goo.gl/8PD8L7VCfyoL6Fca7`,
-                                '_blank'
-                            );
-                        },
-                        function(error) {
-                            // User denied permission or error occurred - fall back to regular link
-                            if (error.code !== error.PERMISSION_DENIED) {
-                                console.error("Geolocation error:", error);
-                            }
-                            window.open(this.href, '_blank');
-                        }
-                    );
-                } else {
-                    // Geolocation not supported - fall back to regular link
-                    window.open(this.href, '_blank');
-                }
-            }
-            // For other click types (middle mouse, etc.), let the default behavior happen
-        });
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-            const navUl = document.querySelector('nav ul');
-            navUl.classList.toggle('show');
-            this.setAttribute('aria-expanded', navUl.classList.contains('show'));
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    const mobileMenu = document.querySelector('nav ul.show');
-                    if (mobileMenu) {
-                        mobileMenu.classList.remove('show');
-                        document.querySelector('.mobile-menu-btn').setAttribute('aria-expanded', 'false');
-                    }
-                }
-            });
-        });
-
-        // Set copyright year
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Add animation class when elements come into view
-        const observerOptions = {
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
+// ===== PERFORMANCE OPTIMIZATIONS =====
+function initializePerformanceOptimizations() {
+    // Lazy loading for images
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                    observer.unobserve(entry.target);
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    imageObserver.unobserve(img);
                 }
             });
-        }, observerOptions);
-
-        document.querySelectorAll('.program-card, .section').forEach(section => {
-            observer.observe(section);
         });
+        
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+}
+
+// ===== ERROR HANDLING =====
+function initializeErrorHandling() {
+    window.addEventListener('error', (e) => {
+        console.error('Script error:', e.error);
+    });
+    
+    window.addEventListener('unhandledrejection', (e) => {
+        console.error('Unhandled promise rejection:', e.reason);
+        e.preventDefault();
+    });
+}
+
+// ===== CONTACT SECTION FUNCTIONALITY =====
+function initializeContactSection() {
+    updateOfficeStatus();
+    setInterval(updateOfficeStatus, 60000);
+    
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleContactForm);
+    }
+}
+
+function updateOfficeStatus() {
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+    const minutes = now.getMinutes();
+    
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+    
+    if (!statusIndicator || !statusText) return;
+    
+    if (day === 0) {
+        statusIndicator.className = 'status-indicator closed';
+        statusText.textContent = 'Closed today';
+    } else if (day === 6) {
+        if (hour >= 9 && hour < 12) {
+            statusIndicator.className = 'status-indicator open';
+            statusText.textContent = `Open - Closes at 12:00 PM`;
+        } else if (hour < 9) {
+            statusIndicator.className = 'status-indicator closed';
+            statusText.textContent = `Opens at 9:00 AM`;
+        } else {
+            statusIndicator.className = 'status-indicator closed';
+            statusText.textContent = 'Closed for the day';
+        }
+    } else {
+        if (hour >= 8 && hour < 17) {
+            statusIndicator.className = 'status-indicator open';
+            const closingTime = 17 - hour - 1;
+            const closingMinutes = 60 - minutes;
+            statusText.textContent = `Open - Closes in ${closingTime}h ${closingMinutes}m`;
+        } else if (hour < 8) {
+            statusIndicator.className = 'status-indicator closed';
+            statusText.textContent = `Opens at 8:00 AM`;
+        } else {
+            statusIndicator.className = 'status-indicator closed';
+            statusText.textContent = 'Closed for the day';
+        }
+    }
+}
+
+function openDirections() {
+    window.open('https://maps.app.goo.gl/8PD8L7VCfyoL6Fca7', '_blank');
+}
+
+function handleContactForm(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const message = document.getElementById('message');
+    
+    if (!name || !email || !message) return;
+    
+    const nameValue = name.value;
+    const emailValue = email.value;
+    const messageValue = message.value;
+    
+    if (!nameValue || !emailValue || !messageValue) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    console.log('Contact form submitted:', { name: nameValue, email: emailValue, message: messageValue });
+    alert('Thank you for your message! We will get back to you soon.');
+    e.target.reset();
+}
+
+// ===== DARK MODE TOGGLE =====
+function initializeDarkMode() {
+    const darkModeToggle = document.querySelector('.dark-mode-toggle');
+    if (!darkModeToggle) return;
+    
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    const currentTheme = localStorage.getItem('theme') || 
+                       (prefersDarkScheme.matches ? 'dark' : 'light');
+    
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        darkModeToggle.setAttribute('aria-label', 'Switch to light mode');
+    }
+    
+    darkModeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            darkModeToggle.setAttribute('aria-label', 'Switch to light mode');
+        } else {
+            localStorage.setItem('theme', 'light');
+            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            darkModeToggle.setAttribute('aria-label', 'Switch to dark mode');
+        }
+    });
+}
+
+// ===== INITIALIZATION =====
+function initializeApp() {
+    try {
+        initializeLoading();
+        initializeMobileMenu();
+        initializeScrollHandlers();
+        initializeSearchModal();
+        initializeCalendar();
+        initializeEventTabs();
+        initializeCarousels();
+        initializeAccordions();
+        initializeQuickActions();
+        populateDynamicContent();
+        enhanceAccessibility();
+        initializePerformanceOptimizations();
+        initializeErrorHandling();
+        initializeContactSection();
+        initializeDarkMode();
+        
+        if (DOM.accordionHeaders.length > 0) {
+            const firstHeader = DOM.accordionHeaders[0];
+            const firstContent = firstHeader.nextElementSibling;
+            if (firstContent) {
+                firstContent.style.maxHeight = firstContent.scrollHeight + "px";
+            }
+        }
+        
+        const yearElement = document.getElementById('year');
+        if (yearElement) {
+            yearElement.textContent = new Date().getFullYear();
+        }
+        
+        console.log('Cieverose College website initialized successfully');
+        
+    } catch (error) {
+        console.error('Error initializing app:', error);
+    }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}
