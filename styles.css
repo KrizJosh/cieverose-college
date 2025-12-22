@@ -3159,4 +3159,49 @@ textarea.form-control {
 
 
 
+/* Quick Actions Menu */
+.quick-actions {
+    position: fixed;
+    bottom: 100px; /* Increased from 30px to make room for back-to-top */
+    right: 30px;
+    z-index: 990;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px; /* Keep this at bottom */
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--nav-active-color);
+    color: white; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 991; /* Higher than quick-actions */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .quick-actions {
+        bottom: 90px; /* Adjusted for mobile */
+        right: 20px;
+    }
+    
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+    }
+}
