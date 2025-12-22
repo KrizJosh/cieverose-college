@@ -871,9 +871,9 @@ function initializeDarkMode() {
     });
 }
 
-// ===== INITIALIZATION =====
+// ===== INITIALIZATION ===== 122225
 function initializeApp() {
-    try {
+    try { 
         initializeLoading();
         initializeMobileMenu();
         initializeScrollHandlers();
@@ -889,6 +889,7 @@ function initializeApp() {
         initializeErrorHandling();
         initializeContactSection();
         initializeDarkMode();
+        initializeEmailContact();
         
         if (DOM.accordionHeaders.length > 0) {
             const firstHeader = DOM.accordionHeaders[0];
@@ -910,9 +911,329 @@ function initializeApp() {
     }
 }
 
+
+
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
     initializeApp();
+}
+
+
+
+
+
+// 122225
+// ===== EMAIL CONTACT FORM =====
+function initializeEmailContact() {
+    const emailForm = document.getElementById('email-contact-form');
+    const enableCC = document.getElementById('enable-cc');
+    const ccRecipients = document.getElementById('cc-recipients');
+    const fileInput = document.getElementById('email-attachments');
+    const fileList = document.getElementById('file-list');
+    const formStatus = document.getElementById('form-status');
+    
+    if (!emailForm) return;
+    
+    // Toggle CC options
+    if (enableCC) {
+        enableCC.addEventListener('change', function() {
+            ccRecipients.style.display = this.checked ? 'flex' : 'none';
+        });
+    }
+    
+    // File attachment handling
+    if (fileInput) {
+        // Drag and drop
+        const dropZone = fileInput.parentElement.querySelector('.file-upload-label');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropZone.style.backgroundColor = '#e9ecef';
+            dropZone.style.borderColor = 'var(--primary-color)';
+        }
+        
+        function unhighlight() {
+            dropZone.style.backgroundColor = '';
+            dropZone.style.borderColor = '';
+        }
+        
+        dropZone.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            updateFileList();
+        }
+        
+        fileInput.addEventListener('change', updateFileList);
+        
+        function updateFileList() {
+            fileList.innerHTML = '';
+            const files = Array.from(fileInput.files);
+            
+            if (files.length === 0) {
+                return;
+            }
+            
+            files.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileSize = formatFileSize(file.size);
+                
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <i class="fas fa-file file-icon"></i>
+                        <span class="file-name">${file.name}</span>
+                    </div>
+                    <span class="file-size">${fileSize}</span>
+                    <button type="button" class="remove-file" data-index="${index}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+            
+            // Add event listeners to remove buttons
+            document.querySelectorAll('.remove-file').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    removeFile(index);
+                });
+            });
+        }
+        
+        function removeFile(index) {
+            const dt = new DataTransfer();
+            const files = Array.from(fileInput.files);
+            
+            files.forEach((file, i) => {
+                if (i !== index) {
+                    dt.items.add(file);
+                }
+            });
+            
+            fileInput.files = dt.files;
+            updateFileList();
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    }
+    
+    // Form submission
+    emailForm.addEventListener('submit', handleEmailSubmit);
+    emailForm.addEventListener('reset', resetForm);
+    
+    async function handleEmailSubmit(e) {
+        e.preventDefault();
+        
+        // Validate form
+        if (!validateForm()) {
+            return;
+        }
+        
+        // Get form data
+        const formData = new FormData();
+        formData.append('name', document.getElementById('sender-name').value);
+        formData.append('email', document.getElementById('sender-email').value);
+        formData.append('subject', document.getElementById('email-subject').value);
+        formData.append('category', document.getElementById('email-category').value);
+        formData.append('message', document.getElementById('email-message').value);
+        
+        // Add CC recipients if enabled
+        if (enableCC && enableCC.checked) {
+            const ccPrimary = document.getElementById('cc-primary').value;
+            const ccSecondary = document.getElementById('cc-secondary').value;
+            
+            if (ccPrimary) formData.append('cc[]', ccPrimary);
+            if (ccSecondary) formData.append('cc[]', ccSecondary);
+        }
+        
+        // Add attachments
+        if (fileInput && fileInput.files.length > 0) {
+            Array.from(fileInput.files).forEach(file => {
+                formData.append('attachments[]', file);
+            });
+        }
+        
+        // Disable submit button
+        const submitBtn = emailForm.querySelector('.submit-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        
+        try {
+            // In a real implementation, you would send this to your backend
+            // For now, we'll simulate the email sending
+            
+            // Prepare email parameters for mailto: fallback
+            const emailParams = prepareEmailParams();
+            
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Show success message
+            showFormStatus('success', 'Email sent successfully! We will respond within 24-48 hours.');
+            
+            // Clear form
+            emailForm.reset();
+            if (fileList) fileList.innerHTML = '';
+            if (ccRecipients) ccRecipients.style.display = 'none';
+            
+            // Provide mailto: fallback link
+            setTimeout(() => {
+                const mailtoLink = document.createElement('a');
+                mailtoLink.href = emailParams;
+                mailtoLink.textContent = 'If the email client didn\'t open, click here';
+                mailtoLink.style.display = 'block';
+                mailtoLink.style.marginTop = '10px';
+                mailtoLink.style.color = 'var(--primary-color)';
+                mailtoLink.target = '_blank';
+                formStatus.appendChild(mailtoLink);
+            }, 1000);
+            
+        } catch (error) {
+            showFormStatus('error', 'Failed to send email. Please try again or use the contact numbers provided.');
+            console.error('Email sending error:', error);
+        } finally {
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Email';
+        }
+    }
+    
+    function validateForm() {
+        const requiredFields = emailForm.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            field.style.borderColor = '#ddd';
+            
+            if (!field.value.trim()) {
+                field.style.borderColor = '#dc3545';
+                isValid = false;
+            }
+        });
+        
+        // Validate email format
+        const emailField = document.getElementById('sender-email');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (emailField.value && !emailRegex.test(emailField.value)) {
+            emailField.style.borderColor = '#dc3545';
+            showFormStatus('error', 'Please enter a valid email address.');
+            isValid = false;
+        }
+        
+        // Validate file size
+        if (fileInput && fileInput.files.length > 0) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            Array.from(fileInput.files).forEach(file => {
+                if (file.size > maxSize) {
+                    showFormStatus('error', `File "${file.name}" exceeds the 10MB size limit.`);
+                    isValid = false;
+                }
+            });
+        }
+        
+        return isValid;
+    }
+    
+    function prepareEmailParams() {
+        const name = encodeURIComponent(document.getElementById('sender-name').value);
+        const email = encodeURIComponent(document.getElementById('sender-email').value);
+        const subject = encodeURIComponent(document.getElementById('email-subject').value);
+        const message = encodeURIComponent(document.getElementById('email-message').value);
+        const category = document.getElementById('email-category').value;
+        
+        // Primary email recipient (you can change this)
+        let to = 'info@cieverosecollege.edu.ph';
+        
+        // Add CC if enabled
+        let cc = '';
+        if (enableCC && enableCC.checked) {
+            const ccPrimary = document.getElementById('cc-primary').value;
+            const ccSecondary = document.getElementById('cc-secondary').value;
+            
+            if (ccPrimary) cc += encodeURIComponent(ccPrimary);
+            if (ccSecondary) cc += (cc ? ',' : '') + encodeURIComponent(ccSecondary);
+        }
+        
+        // Add category to subject if selected
+        let fullSubject = subject;
+        if (category) {
+            const categories = {
+                admission: '[Admission]',
+                academic: '[Academic]',
+                scholarship: '[Scholarship]',
+                feedback: '[Feedback]',
+                complaint: '[Complaint]',
+                partnership: '[Partnership]',
+                other: '[Other]'
+            };
+            fullSubject = `${categories[category] || ''} ${subject}`.trim();
+        }
+        
+        // Construct mailto URL
+        let mailto = `mailto:${to}?subject=${encodeURIComponent(fullSubject)}&body=From: ${name} (${email})%0A%0A${message}`;
+        
+        if (cc) {
+            mailto += `&cc=${cc}`;
+        }
+        
+        return mailto;
+    }
+    
+    function showFormStatus(type, message) {
+        formStatus.className = `form-status ${type}`;
+        formStatus.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            ${message}
+        `;
+        formStatus.style.display = 'block';
+        
+        // Auto-hide after 10 seconds
+        setTimeout(() => {
+            formStatus.style.display = 'none';
+        }, 10000);
+    }
+    
+    function resetForm() {
+        if (fileList) fileList.innerHTML = '';
+        if (ccRecipients) ccRecipients.style.display = 'none';
+        if (enableCC) enableCC.checked = false;
+        formStatus.style.display = 'none';
+        
+        // Reset border colors
+        emailForm.querySelectorAll('.form-control').forEach(field => {
+            field.style.borderColor = '';
+        });
+    }
 }
