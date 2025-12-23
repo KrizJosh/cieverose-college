@@ -1280,3 +1280,181 @@ function initializeEmailContact() {
         });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+// ===== RUNNING STUDENT GIF LOADING ANIMATION =====
+function initializeLoading() {
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const progressBar = document.querySelector('.progress-bar');
+    const progressText = document.querySelector('.progress-text');
+    const skipButton = document.getElementById('skip-loading');
+    const loadingTips = document.querySelector('.loading-tips span');
+    
+    if (!loadingOverlay) return;
+    
+    // Array of loading tips
+    const tips = [
+        "We offer 5 Senior High School strands including ICT, HE, HUMSS, ABM, and GAS.",
+        "Our library has over 100 books and resources for students.",
+        "Cieverose College has been serving the community since 2010.",
+        "Our core values: Strong Faith, Hard Work, Integrity, Excellence, Love, Diversity & Deference.",
+        "We provide hands-on training in fully equipped kitchen labs for HE students.",
+        "Our graduates are prepared to meet industry standards and requirements.",
+        "The school promotes holistic development addressing physical, emotional, spiritual, intellectual, and life skills.",
+        "We conduct research and extension services focused on community development."
+    ];
+    
+    // Function to change tip
+    function changeTip() {
+        if (loadingTips) {
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            loadingTips.textContent = `Did you know? ${randomTip}`;
+        }
+    }
+    
+    // Initial tip
+    changeTip();
+    
+    // Change tip every 3 seconds
+    const tipInterval = setInterval(changeTip, 3000);
+    
+    // Loading simulation
+    let progress = 0;
+    const loadingSteps = [
+        { percent: 10, text: "Initializing..." },
+        { percent: 25, text: "Loading resources..." },
+        { percent: 45, text: "Preparing content..." },
+        { percent: 65, text: "Setting up interface..." },
+        { percent: 85, text: "Almost there..." },
+        { percent: 100, text: "Ready!" }
+    ];
+    
+    let currentStep = 0;
+    
+    const loadingInterval = setInterval(() => {
+        // Update progress
+        if (currentStep < loadingSteps.length) {
+            progress = loadingSteps[currentStep].percent;
+            if (progressText) {
+                progressText.textContent = loadingSteps[currentStep].text;
+            }
+            currentStep++;
+        }
+        
+        // Update progress bar
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        // Check if loading is complete
+        if (progress >= 100) {
+            clearInterval(loadingInterval);
+            clearInterval(tipInterval);
+            
+            // Add completion effect
+            if (progressBar) {
+                progressBar.style.transition = 'all 0.5s ease';
+            }
+            
+            // Hide loading overlay after delay
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+                
+                // Show all sections with animation
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                    
+                    // Trigger entrance animations
+                    document.querySelectorAll('.section').forEach((section, index) => {
+                        setTimeout(() => {
+                            section.style.opacity = '1';
+                            section.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    });
+                    
+                    // Focus on main content
+                    const mainContent = document.getElementById('main-content');
+                    if (mainContent) {
+                        mainContent.setAttribute('tabindex', '-1');
+                        mainContent.focus();
+                    }
+                }, 800);
+            }, 800);
+        }
+    }, 800); // Slower loading for better UX
+    
+    // Skip loading functionality
+    if (skipButton) {
+        skipButton.addEventListener('click', () => {
+            clearInterval(loadingInterval);
+            clearInterval(tipInterval);
+            
+            // Complete loading instantly
+            if (progressBar) {
+                progressBar.style.width = '100%';
+                progressBar.style.transition = 'all 0.3s ease';
+            }
+            
+            if (progressText) {
+                progressText.textContent = 'Ready!';
+            }
+            
+            // Hide loading overlay quickly
+            loadingOverlay.style.opacity = '0';
+            
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                
+                // Show all sections immediately
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                });
+                
+                // Focus on main content
+                const mainContent = document.getElementById('main-content');
+                if (mainContent) {
+                    mainContent.setAttribute('tabindex', '-1');
+                    mainContent.focus();
+                }
+            }, 300);
+        });
+    }
+    
+    // Preload important images
+    preloadImages([
+        'logo.png',
+        'cieverose..jpg',
+        'images/JS/JS2.jpg',
+        'images/JS/JS3.jpg',
+        'images/FT/FT1.jpg',
+        'images/SF/SF10.jpg'
+    ]);
+}
+
+function preloadImages(urls) {
+    let loaded = 0;
+    const total = urls.length;
+    
+    urls.forEach(url => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+            loaded++;
+            console.log(`Preloaded ${loaded}/${total} images`);
+        };
+        img.onerror = () => {
+            loaded++;
+            console.log(`Failed to preload: ${url}`);
+        };
+    });
+}
