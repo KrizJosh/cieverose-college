@@ -67,17 +67,60 @@ const State = {
 };
 
 // ===== LOADING ANIMATION =====
+// ===== RUNNING STUDENT LOADING ANIMATION =====
 function initializeLoading() {
-    window.addEventListener('load', () => {
-        const loadingOverlay = document.querySelector('.loading-overlay');
-        if (loadingOverlay) {
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const progressBar = document.querySelector('.progress-bar');
+    
+    if (!loadingOverlay || !progressBar) return;
+    
+    // Simulate loading progress
+    let progress = 0;
+    const loadingInterval = setInterval(() => {
+        progress += Math.random() * 10;
+        if (progress > 100) {
+            progress = 100;
+            clearInterval(loadingInterval);
+            
+            // Add completion animation
+            progressBar.style.animation = 'none';
+            progressBar.style.width = '100%';
+            
+            // Hide loading overlay after delay
             setTimeout(() => {
                 loadingOverlay.classList.add('hidden');
-                setTimeout(() => loadingOverlay.remove(), 500);
-            }, 1000);
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                    
+                    // Trigger entrance animations for page content
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0)';
+                    });
+                }, 800);
+            }, 500);
+        } else {
+            progressBar.style.width = `${progress}%`;
         }
+    }, 150);
+    
+    // Preload critical images
+    preloadImages([
+        'logo.png',
+        'cieverose..jpg',
+        'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        'https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    ]);
+}
+
+function preloadImages(urls) {
+    urls.forEach(url => {
+        const img = new Image();
+        img.src = url;
     });
 }
+
+
 
 // ===== MOBILE MENU MANAGEMENT =====
 function initializeMobileMenu() {
