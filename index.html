@@ -1,1490 +1,833 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-    <meta name="theme-color" content="#1a5f9a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Cieverose College">
-    <meta name="description" content="Cieverose College - Providing quality education since 2010">
-    <script defer src="/_vercel/insights/script.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="styles.css">
-    <title>Cieverose College, Inc. | Quality Education</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#1a5f9a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Library · Cieverose">
+  <meta name="description" content="Cieverose College Library – resources, collections, and study spaces.">
+  <title>Library · Cieverose College, Inc.</title>
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ===== BASE STYLES (blends with main site) ===== */
+    :root {
+      --primary-color: #1a5f9a;
+      --secondary-color: #FFD700;
+      --accent-color: #FFA500;
+      --text-color: #333;
+      --light-text: #6c757d;
+      --white: #fff;
+      --nav-text-color: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+      --radius-md: 8px;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    /* ===== MAIN NAVIGATION (mirrors main site) ===== */
+    .main-nav {
+      background: linear-gradient(135deg, #1877f2 0%, #0d5bb7 100%);
+      padding: 0 20px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-decoration: none;
+      gap: 10px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    .logo span {
+      color: white;
+    }
+    .main-nav ul {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+    .main-nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 2px solid transparent;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .main-nav ul li a i {
+      font-size: 1rem;
+    }
+    .main-nav ul li a:hover {
+      border-bottom-color: var(--secondary-color);
+      color: var(--secondary-color);
+    }
+    .main-nav ul li a.active {
+      border-bottom-color: var(--secondary-color);
+      color: var(--secondary-color);
+    }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+      .main-nav ul {
+        display: none;
+        flex-direction: column;
+        background: #0d5bb7;
+        padding: 20px;
+        width: 100%;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        gap: 15px;
+      }
+      .main-nav ul.show {
+        display: flex;
+      }
+      .main-nav ul li a {
+        border-bottom: none;
+      }
+    }
+
+    /* ===== LIBRARY SUB-NAV ===== */
+    .library-subnav {
+      background: white;
+      border-bottom: 2px solid #eef2f7;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      position: sticky;
+      top: 68px; /* adjust to main nav height */
+      z-index: 999;
+      padding: 0 20px;
+    }
+    .subnav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .subnav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      list-style: none;
+    }
+    .subnav-links li a {
+      color: #2c3e50;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 6px 0;
+      border-bottom: 2px solid transparent;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .subnav-links li a i {
+      color: var(--primary-color);
+      font-size: 0.9rem;
+    }
+    .subnav-links li a:hover,
+    .subnav-links li a.active {
+      border-bottom-color: var(--secondary-color);
+      color: var(--primary-color);
+    }
+    .subnav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .subnav-actions .search-box {
+      display: flex;
+      align-items: center;
+      background: #f0f4fa;
+      border-radius: 30px;
+      padding: 4px 12px;
+      transition: var(--transition);
+    }
+    .subnav-actions .search-box:focus-within {
+      background: #e6ecf5;
+      box-shadow: 0 0 0 2px rgba(26,95,154,0.2);
+    }
+    .subnav-actions .search-box input {
+      border: none;
+      background: transparent;
+      padding: 8px 6px;
+      font-size: 0.9rem;
+      width: 140px;
+      outline: none;
+    }
+    .subnav-actions .search-box i {
+      color: var(--light-text);
+      font-size: 0.9rem;
+    }
+    .subnav-actions .btn-reserve {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .subnav-actions .btn-reserve:hover {
+      background: #124a7a;
+      transform: scale(1.02);
+    }
+    @media (max-width: 700px) {
+      .subnav-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .subnav-links {
+        justify-content: center;
+      }
+      .subnav-actions {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .subnav-actions .search-box input {
+        width: 100px;
+      }
+    }
+
+    /* ===== LIBRARY HERO ===== */
+    .library-hero {
+      background: linear-gradient(rgba(26, 95, 154, 0.75), rgba(13, 59, 102, 0.8)), 
+                  url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMxYTVmOWEiLz48cGF0aCBkPSJNMjAgMjBoMTB2MTBIMjB6TTUwIDIwaDEwdjEwSDUwek0zNSA0MGgxMHYxMEgzNXpNMjAgNTBoMTB2MTBIMjB6TTUwIDUwaDEwdjEwSDUweiIgZmlsbD0iI2ZmZDcwMCIgb3BhY2l0eT0iMC4yIi8+PC9zdmc+');
+      background-size: cover, 60px 60px;
+      background-blend-mode: overlay;
+      color: white;
+      padding: 60px 0 50px;
+      text-align: center;
+      margin-bottom: 30px;
+      border-radius: 0 0 40px 40px;
+    }
+    .library-hero h1 {
+      font-size: 2.6rem;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .library-hero h1 i {
+      color: var(--secondary-color);
+      margin-right: 12px;
+    }
+    .library-hero p {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      max-width: 650px;
+      margin: 0 auto 20px;
+    }
+    .library-hero .stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .library-hero .stat-item {
+      background: rgba(255,255,255,0.15);
+      padding: 10px 24px;
+      border-radius: 50px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .library-hero .stat-item span {
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--secondary-color);
+    }
+
+    /* ===== SECTION CARDS ===== */
+    .section-title {
+      font-size: 2rem;
+      color: var(--primary-color);
+      border-left: 6px solid var(--secondary-color);
+      padding-left: 18px;
+      margin: 40px 0 25px;
+    }
+    .section-sub {
+      color: var(--light-text);
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 28px;
+      margin-bottom: 50px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      padding: 26px 22px;
+      transition: var(--transition);
+      border-top: 5px solid var(--secondary-color);
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    }
+    .card .icon {
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      margin-bottom: 14px;
+    }
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+    .card p {
+      color: #555;
+      flex: 1;
+      margin-bottom: 16px;
+    }
+    .card .badge {
+      background: var(--primary-color);
+      color: white;
+      padding: 4px 16px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      align-self: flex-start;
+    }
+
+    /* ===== ACCORDION / TABLE ===== */
+    .accordion-item {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      margin-bottom: 18px;
+      overflow: hidden;
+      border: 1px solid #eef2f7;
+    }
+    .accordion-header {
+      background: #f8fafc;
+      padding: 16px 24px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: var(--primary-color);
+      transition: var(--transition);
+      border-bottom: 1px solid transparent;
+    }
+    .accordion-header:hover {
+      background: #edf2f7;
+    }
+    .accordion-header i {
+      margin-right: 10px;
+      color: var(--accent-color);
+    }
+    .accordion-header .count {
+      background: var(--primary-color);
+      color: white;
+      padding: 2px 14px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .accordion-content.open {
+      max-height: 800px;
+    }
+    .accordion-content-inner {
+      padding: 20px 24px;
+      background: white;
+    }
+    .table-wrap {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table th {
+      background: #f0f4fa;
+      color: var(--primary-color);
+      font-weight: 600;
+      padding: 12px 10px;
+      text-align: left;
+      border-bottom: 2px solid #dde3ed;
+    }
+    table td {
+      padding: 10px 10px;
+      border-bottom: 1px solid #e9edf3;
+    }
+    table tr:last-child td {
+      border-bottom: none;
+    }
+    table tr:hover td {
+      background: #f8faff;
+    }
+
+    /* ===== STUDY SPACES ===== */
+    .study-spaces {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin: 30px 0 50px;
+    }
+    .study-card {
+      background: white;
+      border-radius: 14px;
+      padding: 22px 16px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      border: 1px solid #eef2f7;
+      transition: var(--transition);
+    }
+    .study-card i {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+    .study-card h4 {
+      font-weight: 600;
+      color: #1e2a3a;
+    }
+    .study-card p {
+      font-size: 0.9rem;
+      color: var(--light-text);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
+      color: white;
+      padding: 40px 0 20px;
+      margin-top: 50px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+    }
+    .footer-grid h4 {
+      color: var(--secondary-color);
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    .footer-grid ul {
+      list-style: none;
+    }
+    .footer-grid ul li {
+      margin-bottom: 8px;
+    }
+    .footer-grid ul li a {
+      color: #cfd9e6;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    .footer-grid ul li a:hover {
+      color: var(--secondary-color);
+    }
+    .copyright {
+      text-align: center;
+      padding-top: 25px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: #a0b3cc;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .library-hero h1 { font-size: 2rem; }
+      .library-hero .stats { gap: 12px; }
+      .library-hero .stat-item { padding: 6px 16px; }
+      .section-title { font-size: 1.6rem; }
+    }
+    .mt-2 { margin-top: 20px; }
+    .text-accent { color: var(--accent-color); }
+    .flex { display: flex; align-items: center; gap: 8px; }
+  </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay">
-        <div class="loader"></div>
+  <!-- ===== MAIN NAVIGATION (identical to main site) ===== -->
+  <nav class="main-nav">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="Cieverose College Logo" style="height:40px;">
+        <span>Cieverose College, Inc.</span>
+      </a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul id="navMenu">
+        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#" class="active"><i class="fas fa-book-open"></i> Library</a></li>
+        <li><a href="index.html#programs"><i class="fas fa-graduation-cap"></i> Programs</a></li>
+        <li><a href="index.html#events"><i class="fas fa-calendar-alt"></i> Events</a></li>
+        <li><a href="index.html#contact"><i class="fas fa-phone"></i> Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== LIBRARY SUB-NAV (library-specific navigation) ===== -->
+  <div class="library-subnav">
+    <div class="subnav-container">
+      <ul class="subnav-links">
+        <li><a href="#collections" class="active"><i class="fas fa-archive"></i> Collections</a></li>
+        <li><a href="#journals"><i class="fas fa-newspaper"></i> Journals</a></li>
+        <li><a href="#filipiniana"><i class="fas fa-leaf"></i> Filipiniana</a></li>
+        <li><a href="#study-spaces"><i class="fas fa-chair"></i> Study Spaces</a></li>
+        <li><a href="#hours"><i class="fas fa-clock"></i> Hours</a></li>
+      </ul>
+      <div class="subnav-actions">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search catalog...">
+        </div>
+        <button class="btn-reserve"><i class="fas fa-calendar-plus"></i> Reserve</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LIBRARY HERO ===== -->
+  <section class="library-hero">
+    <div class="container">
+      <h1><i class="fas fa-landmark"></i> Library & Learning Commons</h1>
+      <p>Explore our growing collections, study spaces, and digital resources — all designed to support your academic journey.</p>
+      <div class="stats">
+        <div class="stat-item"><span>10k+</span> Books</div>
+        <div class="stat-item"><span>50+</span> Journals</div>
+        <div class="stat-item"><span>24/7</span> Online Access</div>
+        <div class="stat-item"><span>4</span> Study Zones</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <!-- ===== QUICK CARDS ===== -->
+    <div class="card-grid">
+      <div class="card">
+        <div class="icon"><i class="fas fa-book"></i></div>
+        <h3>Book Collection</h3>
+        <p>Over 10,000 volumes across all disciplines: education, business, ICT, humanities, and more.</p>
+        <span class="badge">New arrivals</span>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fas fa-newspaper"></i></div>
+        <h3>Periodicals & Journals</h3>
+        <p>Access local and international magazines, academic journals, and newspapers.</p>
+        <span class="badge">Updated monthly</span>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fas fa-laptop"></i></div>
+        <h3>E-Resources</h3>
+        <p>Online databases, e-books, and research portals available for all students and faculty.</p>
+        <span class="badge">Remote access</span>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fas fa-users"></i></div>
+        <h3>Study Rooms</h3>
+        <p>Group study rooms with whiteboards, plus quiet individual study carrels.</p>
+        <span class="badge">Reserve online</span>
+      </div>
     </div>
 
-    <!-- Skip Link for Keyboard Users -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <!-- Navigation Bar -->
-    <nav aria-label="Main navigation" id="main-nav">
-		<div class="nav-container">
-			<a href="index.html" class="logo">
-				<img src="logo.png" alt="Cieverose College Logo" style="height: 50px;">
-				<span>Cieverose College, Inc.</span>
-			</a>
-			<button class="mobile-menu-btn" id="mobile-menu-btn" aria-expanded="false" aria-label="Toggle menu">
-				<i class="fas fa-bars"></i>
-			</button>
-			<ul id="nav-menu">
-				<li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
-				<li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
-				<li><a href="#programs"><i class="fas fa-book"></i> Programs</a></li>
-				<li><a href="#events"><i class="fas fa-calendar-alt"></i> Events</a></li>
-				<li><a href="#contact"><i class="fas fa-phone"></i> Contact</a></li>
-			</ul>
-		</div>
-	</nav>
+    <!-- ===== COLLECTIONS (accordion) ===== -->
+    <h2 class="section-title" id="collections"><i class="fas fa-archive text-accent"></i> Library Collections</h2>
+    <p class="section-sub">Browse our curated collections. Click on each section to expand.</p>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero" role="banner">
-        <div class="hero-content">
-            <h1>Empowering Futures at Cieverose College, Inc.</h1>
-            <p>Providing quality education that combines academic excellence with practical skills development since 2010</p>
-            <div class="hero-buttons">
-                <a href="#programs" class="cta-button">
-                    <i class="fas fa-book-open"></i> Explore Programs
-                </a>
-                <a href="#contact" class="cta-button secondary">
-                    <i class="fas fa-phone-alt"></i> Contact Us
-                </a>
-            </div>
+    <!-- 1. Professional Journals -->
+    <div class="accordion-item" id="journals">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span><i class="fas fa-book-open"></i> Professional Journals <span class="count">10 items</span></span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-content-inner">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Title</th><th>Author/Brand</th><th>Year</th><th>Publisher</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>Prayer Journal Konek 5.5x8 Inches, 128 Pages</td><td>National Book Store</td><td>2024</td><td>National Book Store</td><td>Classic/fancy journal</td></tr>
+                <tr><td>Gratitude Journal Ang Bible Pinoy Version 5.5x8</td><td>National Book Store</td><td>2024</td><td>National Book Store</td><td>Themed (faith-based)</td></tr>
+                <tr><td>Kozo Journal Notebook A4 (various colors)</td><td>National Book Store</td><td>2023</td><td>National Book Store</td><td>Fancy journal</td></tr>
+                <tr><td>Little Birdie Paintable Canvas Soft Cover A5 Dotted 80 Pages</td><td>Little Birdie</td><td>2023</td><td>Little Birdie</td><td>Fancy/themed</td></tr>
+                <tr><td>Little Birdie Paintable Canvas Cover A6 90gsm 120 Pages</td><td>Little Birdie</td><td>2023</td><td>Little Birdie</td><td>Fancy/themed</td></tr>
+                <tr><td>2025 Daily Planner with Foil Stamping 14.8x21cm</td><td>Best Buy</td><td>2024</td><td>Best Buy (NBS)</td><td>Themed planner</td></tr>
+                <tr><td>Best Buy Budget & Saver Planner 14.8x20.5 cm 60 Sheets</td><td>Best Buy</td><td>2024</td><td>Best Buy (NBS)</td><td>Classic planner</td></tr>
+                <tr><td>2025 Monthly Planner Pad 11x8.5 inches, Garden</td><td>National Book Store</td><td>2024</td><td>National Book Store</td><td>Themed planner</td></tr>
+                <tr><td>Undated Weekly Planner 4x1 inches 54 Sheets, Beige</td><td>National Book Store</td><td>2024</td><td>National Book Store</td><td>Classic planner</td></tr>
+                <tr><td>Undated Weekly Horizontal Planner 8x6 inches, Lime</td><td>National Book Store</td><td>2024</td><td>National Book Store</td><td>Themed planner</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <a href="#about" class="scroll-down" aria-label="Scroll down">
-            <i class="fas fa-chevron-down"></i>
-        </a>
-    </section>
-
-    <!-- Main Content -->
-    <main class="container" id="main-content">
-        <!-- Welcome Section -->
-        <section id="about" class="section">
-            <h2 class="section-title">About Our School</h2>
-            <p class="intro-text">
-                At Cieverose College, we are committed to nurturing well-rounded individuals through a balanced approach to education that combines rigorous academics with practical life skills development.
-            </p>
-            
-            <div class="mission-vision-grid">
-                <article class="mission-card">
-                    <div class="card-icon">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <h3>Our Mission</h3>
-                    <p>To provide quality education that prepares students for success in a changing world through innovative teaching and a supportive community.</p>
-                </article>
-                
-                <article class="mission-card">
-                    <div class="card-icon">
-                        <i class="fas fa-eye"></i>
-                    </div>
-                    <h3>Our Vision</h3>
-                    <p>To be a leading educational institution that nurtures lifelong learners and responsible global citizens.</p>
-                </article>
-                
-                <article class="mission-card">
-                    <div class="card-icon">
-                        <i class="fas fa-gem"></i>
-                    </div>
-                    <h3>Our Philosophy</h3>
-                    <p class="philosophy">"To serve God is to Serve Others."</p>
-                </article>
-            </div>
-            
-            <!-- School Goals -->
-            <article class="mt-xl">
-                <h3><i class="fas fa-flag text-accent"></i> SCHOOL GOALS</h3>
-                <ul class="school-goals">
-                    <li>Provide high-quality graduates that meet industry standards</li>
-                    <li>Foster holistic student development addressing physical, emotional, spiritual, intellectual, and life skills</li>
-                    <li>Empower youth to become responsible, productive, and contributing members of their communities</li>
-                    <li>Cultivate a learning environment rooted in strong faith, integrity, and respect for diversity</li>
-                    <li>Promote excellence and hard work among students, faculty, and staff</li>
-                    <li>Ensure continuous improvement in educational programs and services to maintain leadership in education</li>
-                    <li>Encourage love, respect, and understanding within the school community to build a harmonious environment</li>
-                    <li>Conduct research and extension services focused on community development</li>
-                </ul>
-            </article>
-            
-            <!-- Core Values -->
-            <article class="mt-xl">
-                <h3><i class="fas fa-star text-accent"></i> OUR CORE VALUES, OUR SHIELD</h3>
-                <div class="core-values-grid">
-                    <div class="core-value-card" tabindex="0">
-                        <div class="core-value-header">
-                            <span class="core-value-letter">S</span>
-                            <h4>Strong Faith</h4>
-                        </div>
-                        <div class="core-value-content">
-                            <p>A foundation of spiritual strength and moral integrity that guides personal and communal growth. Strong faith nurtures resilience, hope, and ethical decision-making, empowering students to face challenges with confidence and purpose.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="core-value-card" tabindex="0">
-                        <div class="core-value-header">
-                            <span class="core-value-letter">H</span>
-                            <h4>Hard Work</h4>
-                        </div>
-                        <div class="core-value-content">
-                            <p>The commitment to diligence, perseverance, and consistent effort in all academic and personal endeavors. Hard work instills discipline and a strong work ethic, enabling students to achieve excellence and overcome obstacles.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="core-value-card" tabindex="0">
-                        <div class="core-value-header">
-                            <span class="core-value-letter">I</span>
-                            <h4>Integrity</h4>
-                        </div>
-                        <div class="core-value-content">
-                            <p>Upholding honesty, transparency, and ethical behavior in all actions. Integrity fosters trustworthiness and accountability, essential for building character and maintaining a respectful academic and social environment.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="core-value-card" tabindex="0">
-                        <div class="core-value-header">
-                            <span class="core-value-letter">E</span>
-                            <h4>Excellence</h4>
-                        </div>
-                        <div class="core-value-content">
-                            <p>Striving for the highest standards in education, innovation, and service. Excellence motivates continuous improvement, creativity, and the pursuit of quality in all aspects of learning and community engagement.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="core-value-card" tabindex="0">
-                        <div class="core-value-header">
-                            <span class="core-value-letter">L</span>
-                            <h4>Love</h4>
-                        </div>
-                        <div class="core-value-content">
-                            <p>Cultivating compassion, empathy, and genuine care for others. Love promotes harmonious relationships, social responsibility, and a supportive community where everyone feels valued and respected.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="core-value-card" tabindex="0">
-                        <div class="core-value-header">
-                            <span class="core-value-letter">D</span>
-                            <h4>Diversity & Deference</h4>
-                        </div>
-                        <div class="core-value-content">
-                            <p>Valuing the richness of different cultures, ideas, and perspectives while showing respect and humility towards others. Embracing diversity and practicing deference foster inclusivity, collaboration, and mutual understanding in a globalized world.</p>
-                        </div>
-                    </div>
-                </div>
-                <p class="text-center"><strong>This SHIELD framework serves as a guiding compass for students, faculty, and staff at Cieverose College, aligning with its mission to empower youth through holistic education and character formation.</strong></p>
-            </article>
-        </section>
-        
-        <!-- Updates Section -->
-        <section id="updates" class="section bg-section">
-            <h2 class="text-center">Campus Updates</h2>
-            <p class="text-center mb-xl">Stay informed with the latest news and events</p>
-            
-            <div class="dynamic-content-grid">
-                <!-- Announcements Widget -->
-                <div class="widget announcements-widget">
-                    <div class="widget-header">
-                        <div class="widget-icon">
-                            <i class="fas fa-bullhorn"></i>
-                        </div>
-                        <h3>Announcements</h3>
-                    </div>
-                    <div id="announcements-container">
-                        <!-- Announcements will be populated by JavaScript -->
-                    </div>
-                </div>
-                
-                <!-- Events Widget -->
-                <div class="widget events-widget">
-                    <div class="widget-header">
-                        <div class="widget-icon">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <h3>Upcoming Events</h3>
-                    </div>
-                    <div id="events-container">
-                        <!-- Events will be populated by JavaScript -->
-                    </div>
-                </div>
-                
-                <!-- News Widget -->
-                <div class="widget news-widget">
-                    <div class="widget-header">
-                        <div class="widget-icon">
-                            <i class="fas fa-newspaper"></i>
-                        </div>
-                        <h3>News & Updates</h3>
-                    </div>
-                    <div id="news-container">
-                        <!-- News will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-		
-		
-		
-		
-		
-		<!-- Calendar Section -->
-		<section id="calendar" class="section calendar-section">
-			<h2 class="text-center">Academic Calendar</h2>
-			<p class="text-center mb-xl">Important dates for SY 2025-2026</p>
-			
-			<div class="calendar-container">
-				<div class="calendar-header">
-					<button id="prev-month" class="calendar-nav" aria-label="Previous month"><i class="fas fa-chevron-left"></i></button>
-					<h3 id="current-month-year">July 2025</h3>
-					<button id="next-month" class="calendar-nav" aria-label="Next month"><i class="fas fa-chevron-right"></i></button>
-				</div>
-				<div class="calendar-grid" id="calendar-days">
-					<!-- Calendar will be generated by JavaScript -->
-				</div>
-				<div class="calendar-legend">
-					<div class="legend-item">
-						<span class="legend-color legend-today"></span>
-						<span>Today</span>
-					</div>
-					<div class="legend-item">
-						<span class="legend-color legend-academic"></span>
-						<span>Academic</span>
-					</div>
-					<div class="legend-item">
-						<span class="legend-color legend-exam"></span>
-						<span>Exam</span>
-					</div>
-					<div class="legend-item">
-						<span class="legend-color legend-holiday"></span>
-						<span>Holiday</span>
-					</div>
-					<div class="legend-item">
-						<span class="legend-color legend-event"></span>
-						<span>Event</span>
-					</div>
-					<div class="legend-item">
-						<span class="legend-color legend-selected"></span>
-						<span>Selected</span>
-					</div>
-				</div>
-				<div class="calendar-events" id="calendar-events">
-					<h4>Key Dates:</h4>
-					<ul class="key-dates-list" id="key-dates-list">
-						<!-- Events will be populated by JavaScript -->
-					</ul>
-				</div>
-			</div>
-		</section>
-        
-        <!-- Programs Section -->
-        <section id="programs" class="section bg-section">
-            <h2 class="section-title">Our Programs</h2>
-            <div class="programs">
-                <!-- Program Cards -->
-                <!-- <div class="program-card"> -->
-                    <!-- <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Elementary Program"> -->
-                    <!-- <div class="program-card-content"> -->
-                        <!-- <h3><i class="fas fa-pencil-alt"></i> Elementary Program</h3> -->
-                        <!-- <p>Our elementary program focuses on building strong foundations in literacy, numeracy, and social skills.</p> -->
-                        <!-- <ul> -->
-                            <!-- <li>Grades 1-6</li> -->
-                            <!-- <li>Integrated curriculum</li> -->
-                            <!-- <li>Specialized art and music classes</li> -->
-                        <!-- </ul> -->
-                    <!-- </div> -->
-                <!-- </div> -->
-                
-                <!-- Senior High School Programs -->
-                <div class="program-card">
-                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="ICT students working on computers">
-                    <div class="program-card-content">
-                        <h3><i class="fas fa-laptop-code"></i> Information and Communication Technology (ICT)</h3>
-                        <p>Prepares students for careers in programming, animation, and computer systems servicing.</p>
-                        <ul>
-                            <li>Career paths: Programmer, Web Developer, IT Specialist</li>
-                            <li>Specialized subjects: Programming, Animation, Computer Systems Servicing</li>
-                            <li>NC II Certification opportunities</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="program-card">
-                    <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="HE students cooking in kitchen">
-                    <div class="program-card-content">
-                        <h3><i class="fas fa-utensils"></i> Home Economics (HE)</h3>
-                        <p>Focuses on livelihood skills in cookery, bread and pastry production, food and beverage services, tourism, and hospitality management.</p>
-                        <ul>
-                            <li>Career paths: Chef, Baker, Hotel/Restaurant Manager</li>
-                            <li>Specialized subjects: Cookery, Food and Beverage Services, Tourism</li>
-                            <li>Hands-on training in fully equipped kitchen labs</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="program-card">
-                    <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="HUMSS students in discussion">
-                    <div class="program-card-content">
-                        <h3><i class="fas fa-book-reader"></i> Humanities and Social Sciences (HUMSS)</h3>
-                        <p>Designed for students interested in liberal arts, education, journalism, and social sciences.</p>
-                        <ul>
-                            <li>Career paths: Teacher, Lawyer, Journalist, Psychologist</li>
-                            <li>Specialized subjects: Creative Writing, Social Sciences, Philosophy</li>
-                            <li>Strong preparation for college degrees in arts and humanities</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="program-card">
-                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="ABM students analyzing data">
-                    <div class="program-card-content">
-                        <h3><i class="fas fa-chart-line"></i> Accountancy, Business and Management (ABM)</h3>
-                        <p>Focuses on business principles, financial management, and entrepreneurship.</p>
-                        <ul>
-                            <li>Career paths: Accountant, Entrepreneur, Business Manager</li>
-                            <li>Specialized subjects: Business Math, Finance, Marketing</li>
-                            <li>Real-world business simulations and case studies</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="program-card">
-                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="GAS students in classroom">
-                    <div class="program-card-content">
-                        <h3><i class="fas fa-graduation-cap"></i> General Academic Strand (GAS)</h3>
-                        <p>Designed for students who are undecided on their college path, offering a broad range of subjects.</p>
-                        <ul>
-                            <li>Career paths: College preparation for any degree program</li>
-                            <li>Specialized subjects: Humanities, Social Sciences, Business, Science</li>
-                            <li>Flexible curriculum for diverse interests</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Library Section -->
-		
-        <section id="library" class="library-section section">
-			<div class="container">
-				<div class="library-header">
-					<img src="logo.png" alt="Cieverose College Logo" class="library-logo">
-					<div>
-						<h2>Library Collections</h2>
-						<p>Explore our extensive collection of academic resources</p>
-					</div>
-				</div>
-				
-				
-				
-				<!-- Professional Journals Accordion -->
-				<div class="accordion-item" data-collection="journals">
-					<div class="accordion-header">
-						<span><i class="fas fa-book text-accent"></i> Professional Journals Collection</span>
-						<span class="item-count">10 items</span>
-					</div>
-					<div class="accordion-content">
-						<div class="accordion-content-inner">
-							<div class="table-container">
-								<table class="data-table">
-									<thead>
-										<tr>
-											<th data-sort="title">Title / Product Name <i class="fas fa-sort"></i></th>
-											<th data-sort="author">Author / Brand <i class="fas fa-sort"></i></th>
-											<th data-sort="year">Year <i class="fas fa-sort"></i></th>
-											<th data-sort="publisher">Publisher / Brand <i class="fas fa-sort"></i></th>
-											<th>Notes</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>Prayer Journal Konek 5.5x8 Inches, 128 Pages</td>
-											<td>National Book Store</td>
-											<td>2024</td>
-											<td>National Book Store</td>
-											<td>Classic/fancy journal</td>
-										</tr>
-										<tr>
-											<td>Gratitude Journal Ang Bible Pinoy Version 5.5x8</td>
-											<td>National Book Store</td>
-											<td>2024</td>
-											<td>National Book Store</td>
-											<td>Themed journal (faith-based)</td>
-										</tr>
-										<tr>
-											<td>Kozo Journal Notebook A4 (various colors)</td>
-											<td>National Book Store</td>
-											<td>2023</td>
-											<td>National Book Store</td>
-											<td>Fancy journal with textured cover</td>
-										</tr>
-										<tr>
-											<td>Little Birdie Paintable Canvas Soft Cover A5 Dotted 80 Pages</td>
-											<td>Little Birdie</td>
-											<td>2023</td>
-											<td>Little Birdie</td>
-											<td>Fancy/themed journal</td>
-										</tr>
-										<tr>
-											<td>Little Birdie Paintable Canvas Cover A6 90gsm 120 Pages</td>
-											<td>Little Birdie</td>
-											<td>2023</td>
-											<td>Little Birdie</td>
-											<td>Fancy/themed journal</td>
-										</tr>
-										<tr>
-											<td>2025 Daily Planner with Foil Stamping 14.8x21cm</td>
-											<td>Best Buy</td>
-											<td>2024</td>
-											<td>Best Buy (NBS brand)</td>
-											<td>Themed planner/journal</td>
-										</tr>
-										<tr>
-											<td>Best Buy Budget & Saver Planner 14.8x20.5 cm 60 Sheets</td>
-											<td>Best Buy</td>
-											<td>2024</td>
-											<td>Best Buy (NBS brand)</td>
-											<td>Classic planner</td>
-										</tr>
-										<tr>
-											<td>2025 Monthly Planner Pad 11x8.5 inches, Garden</td>
-											<td>National Book Store</td>
-											<td>2024</td>
-											<td>National Book Store</td>
-											<td>Themed planner</td>
-										</tr>
-										<tr>
-											<td>Undated Weekly Planner 4x1 inches 54 Sheets, Beige</td>
-											<td>National Book Store</td>
-											<td>2024</td>
-											<td>National Book Store</td>
-											<td>Classic planner</td>
-										</tr>
-										<tr>
-											<td>Undated Weekly Horizontal Planner 8x6 inches, Lime</td>
-											<td>National Book Store</td>
-											<td>2024</td>
-											<td>National Book Store</td>
-											<td>Themed planner</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Periodicals Accordion -->
-				<div class="accordion-item" data-collection="periodicals">
-					<div class="accordion-header">
-						<span><i class="fas fa-newspaper text-accent"></i> Periodicals Collection</span>
-						<span class="item-count">20 items</span>
-					</div>
-					<div class="accordion-content">
-						<div class="accordion-content-inner">
-							<div class="table-container">
-								<table class="data-table">
-									<thead>
-										<tr>
-											<th data-sort="number">No. <i class="fas fa-sort"></i></th>
-											<th data-sort="title">Title <i class="fas fa-sort"></i></th>
-											<th data-sort="publisher">Publisher / Brand <i class="fas fa-sort"></i></th>
-											<th data-sort="year">Year / Issue Date <i class="fas fa-sort"></i></th>
-											<th>Notes</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>1</td>
-											<td>Mega Magazine</td>
-											<td>Mega Publishing</td>
-											<td>Feb 2025</td>
-											<td>Local lifestyle & culture</td>
-										</tr>
-										<tr>
-											<td>2</td>
-											<td>Rising Tigers: The Nation Builders in Asia</td>
-											<td>Rising Tigers Media</td>
-											<td>2024</td>
-											<td>Regional business & leadership</td>
-										</tr>
-										<tr>
-											<td>3</td>
-											<td>Billboard PH Special - Ben and Ben Magazine</td>
-											<td>Billboard Philippines</td>
-											<td>2024</td>
-											<td>Entertainment & music</td>
-										</tr>
-										<tr>
-											<td>4</td>
-											<td>Vogue Magazine</td>
-											<td>Condé Nast</td>
-											<td>Dec 2023</td>
-											<td>International fashion</td>
-										</tr>
-										<tr>
-											<td>5</td>
-											<td>Vogue Magazine</td>
-											<td>Condé Nast</td>
-											<td>Oct 2023</td>
-											<td>International fashion</td>
-										</tr>
-										<tr>
-											<td>6</td>
-											<td>Vogue Magazine</td>
-											<td>Condé Nast</td>
-											<td>Sep 2023</td>
-											<td>International fashion</td>
-										</tr>
-										<tr>
-											<td>7</td>
-											<td>Vogue Magazine</td>
-											<td>Condé Nast</td>
-											<td>Jul 2023</td>
-											<td>International fashion</td>
-										</tr>
-										<tr>
-											<td>8</td>
-											<td>Vogue Magazine</td>
-											<td>Condé Nast</td>
-											<td>Jun 2023</td>
-											<td>International fashion</td>
-										</tr>
-										<tr>
-											<td>9</td>
-											<td>Vogue Magazine</td>
-											<td>Condé Nast</td>
-											<td>May 2023</td>
-											<td>International fashion</td>
-										</tr>
-										<tr>
-											<td>10</td>
-											<td>W Korea</td>
-											<td>W Korea Magazine</td>
-											<td>Feb 2022</td>
-											<td>Korean lifestyle & fashion</td>
-										</tr>
-										<tr>
-											<td>11</td>
-											<td>Harper's Bazaar</td>
-											<td>Harper's Bazaar</td>
-											<td>May 2022</td>
-											<td>International fashion</td>
-										</tr>
-										<tr>
-											<td>12</td>
-											<td>National Geographic Kids Almanac</td>
-											<td>National Geographic Society</td>
-											<td>2024</td>
-											<td>Children's science & nature</td>
-										</tr>
-										<tr>
-											<td>13</td>
-											<td>Reader's Digest</td>
-											<td>Reader's Digest Association</td>
-											<td>2023</td>
-											<td>General interest</td>
-										</tr>
-										<tr>
-											<td>14</td>
-											<td>Cosmopolitan</td>
-											<td>Hearst Communications</td>
-											<td>2023</td>
-											<td>Women's lifestyle</td>
-										</tr>
-										<tr>
-											<td>15</td>
-											<td>Esquire</td>
-											<td>Hearst Communications</td>
-											<td>2023</td>
-											<td>Men's lifestyle & culture</td>
-										</tr>
-										<tr>
-											<td>16</td>
-											<td>Time Magazine</td>
-											<td>Time USA</td>
-											<td>2023</td>
-											<td>News & current affairs</td>
-										</tr>
-										<tr>
-											<td>17</td>
-											<td>Newsweek</td>
-											<td>Newsweek LLC</td>
-											<td>2023</td>
-											<td>News & current affairs</td>
-										</tr>
-										<tr>
-											<td>18</td>
-											<td>Sports Illustrated</td>
-											<td>Sports Illustrated</td>
-											<td>2023</td>
-											<td>Sports news & features</td>
-										</tr>
-										<tr>
-											<td>19</td>
-											<td>Entrepreneur</td>
-											<td>Entrepreneur Media</td>
-											<td>2023</td>
-											<td>Business & startups</td>
-										</tr>
-										<tr>
-											<td>20</td>
-											<td>Forbes</td>
-											<td>Forbes Media</td>
-											<td>2023</td>
-											<td>Business & finance</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Filipiniana Accordion -->
-				<div class="accordion-item" data-collection="filipiniana">
-					<div class="accordion-header">
-						<span><i class="fas fa-leaf text-accent"></i> Filipiniana Collection</span>
-						<span class="item-count">7 items</span>
-					</div>
-					<div class="accordion-content">
-						<div class="accordion-content-inner">
-							<div class="table-container">
-								<table class="data-table">
-									<thead>
-										<tr>
-											<th data-sort="title">Title <i class="fas fa-sort"></i></th>
-											<th data-sort="author">Author(s) <i class="fas fa-sort"></i></th>
-											<th data-sort="year">Year <i class="fas fa-sort"></i></th>
-											<th data-sort="publisher">Publisher <i class="fas fa-sort"></i></th>
-											<th>Notes</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>Insect Hag and Other Stories</td>
-											<td>Yvette Fernandez</td>
-											<td>2024</td>
-											<td>Anvil Publishing</td>
-											<td>Contemporary Filipino fiction</td>
-										</tr>
-										<tr>
-											<td>Mga Kuwento ni Lola Basyang (New Edition)</td>
-											<td>Severino Reyes (retold by various)</td>
-											<td>2023</td>
-											<td>Adarna House</td>
-											<td>Classic Filipino folktales</td>
-										</tr>
-										<tr>
-											<td>Mga Kwento ni Lola Basyang sa Modernong Panahon</td>
-											<td>Various Authors</td>
-											<td>2022</td>
-											<td>Lampara Books</td>
-											<td>Modern retelling of folklore</td>
-										</tr>
-										<tr>
-											<td>Bayaning Pilipino: Mga Kwento ng Kabayanihan</td>
-											<td>Various Authors</td>
-											<td>2021</td>
-											<td>Anvil Publishing</td>
-											<td>Stories of Filipino heroes</td>
-										</tr>
-										<tr>
-											<td>Tala: Mga Kuwento ng Kababaihan</td>
-											<td>Various Authors</td>
-											<td>2021</td>
-											<td>Ateneo de Manila Press</td>
-											<td>Filipino women's narratives</td>
-										</tr>
-										<tr>
-											<td>Mga Dula sa Panahon ng Pandemya</td>
-											<td>Various Authors</td>
-											<td>2020</td>
-											<td>University of the Philippines Press</td>
-											<td>Filipino plays on pandemic</td>
-										</tr>
-										<tr>
-											<td>Filipino Poetry Today</td>
-											<td>Various Filipino Poets</td>
-											<td>2020</td>
-											<td>De La Salle University Press</td>
-											<td>Contemporary poetry collection</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- List of Books Accordion -->
-				<div class="accordion-item" data-collection="books">
-					<div class="accordion-header">
-						<span><i class="fas fa-book-open text-accent"></i> List of Books</span>
-						<span class="item-count">137 items</span>
-					</div>
-					<div class="accordion-content">
-						<div class="accordion-content-inner">
-							<div class="table-container">
-								<table class="data-table">
-									<thead>
-										<tr>
-											<th data-sort="number">NO <i class="fas fa-sort"></i></th>
-											<th data-sort="author">AUTHOR <i class="fas fa-sort"></i></th>
-											<th data-sort="title">TITLE <i class="fas fa-sort"></i></th>
-											<th data-sort="year">YEAR <i class="fas fa-sort"></i></th>
-											<th data-sort="volume">VOLUME <i class="fas fa-sort"></i></th>
-											<th data-sort="subject">SUBJECT CODE <i class="fas fa-sort"></i></th>
-											<th data-sort="year-sem">Yr & Sem <i class="fas fa-sort"></i></th>
-											<th data-sort="copies">No. of Copies <i class="fas fa-sort"></i></th>
-											<th data-sort="format">Format <i class="fas fa-sort"></i></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>1</td>
-											<td>Vistan, Deogracias</td>
-											<td>The Filipino Entrepreneur</td>
-											<td>2023</td>
-											<td>1st Ed</td>
-											<td>ECC 101</td>
-											<td>11</td>
-											<td>6</td>
-											<td>Printed</td>
-										</tr>
-										<tr>
-											<td>2</td>
-											<td>Feron, Jose</td>
-											<td>The Greatest Salesman I Know Does Not Sell</td>
-											<td>2022</td>
-											<td>1st Ed</td>
-											<td>ECC 101</td>
-											<td>11</td>
-											<td>6</td>
-											<td>Printed</td>
-										</tr>
-										<tr>
-											<td>3</td>
-											<td>Smith, Mark</td>
-											<td>The Entrepreneur's Guide to the Art of War</td>
-											<td>2021</td>
-											<td>1st Ed</td>
-											<td>ECC 101</td>
-											<td>11</td>
-											<td>6</td>
-											<td>Printed</td>
-										</tr>
-										<!-- Sample of additional rows -->
-										<tr>
-											<td>136</td>
-											<td>Garcia, M. L</td>
-											<td>The Self and Identity: A Multidisciplinary Approach</td>
-											<td>2021</td>
-											<td>1st Ed</td>
-											<td>GE1_UTS</td>
-											<td>11</td>
-											<td>10</td>
-											<td>Printed</td>
-										</tr>
-										<tr>
-											<td>137</td>
-											<td>Reyes, J. P</td>
-											<td>Understanding Human Behavior and the Self</td>
-											<td>2022</td>
-											<td>1st Ed</td>
-											<td>GE1_UTS</td>
-											<td>11</td>
-											<td>10</td>
-											<td>Printed</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				
-			</div>
-		</section>
-		
-		
-		
-		
-		
-		
-		<section id="events" class="section">
-			<div class="container">
-				<h2 class="section-title">School Events</h2>
-				
-				<!-- Past Events Tabs -->
-				<div class="event-tabs">
-					<button class="event-tab active" data-tab="js-prom">JS Prom</button>
-					<button class="event-tab" data-tab="field-trip">Field Trip</button>
-					<button class="event-tab" data-tab="sportsfest">Sportsfest</button>
-					<button class="event-tab" data-tab="cultural">Cultural Events</button>
-				</div>
-				
-				<!-- JS Prom Tab Content -->
-				<div id="js-prom" class="event-content active">
-					<div class="event-carousel">
-						<div class="carousel-container">
-							<div class="carousel-slide">
-								<img src="images/JS/JS2.jpg" alt="JS Prom event showing students in formal attire">
-								<div class="carousel-caption-text">
-									<h3>Annual JS Prom</h3>
-									<p>Students celebrating their memorable night in elegant formal attire</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/JS/JS3.jpg" alt="JS Prom event showing students dancing">
-								<div class="carousel-caption-text">
-									<h3>JS Prom Night</h3>
-									<p>Students enjoying the dance floor at their prom night</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/JS/JS5.jpg" alt="JS Prom event showing group photo">
-								<div class="carousel-caption-text">
-									<h3>Group Photos</h3>
-									<p>Students capturing memories with their friends</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/JS/JS6.jpg" alt="JS Prom event showing decorations">
-								<div class="carousel-caption-text">
-									<h3>Elegant Decorations</h3>
-									<p>Beautifully decorated venue for the prom night</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/JS/JS8.jpg" alt="JS Prom event showing awards ceremony">
-								<div class="carousel-caption-text">
-									<h3>Awards Ceremony</h3>
-									<p>Recognizing students for their achievements</p>
-								</div>
-							</div>
-						</div>
-						<div class="carousel-nav">
-							<button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
-							<button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
-						</div>
-						<div class="carousel-indicators">
-							<div class="carousel-indicator active"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Field Trip Tab Content -->
-				<div id="field-trip" class="event-content">
-					<div class="event-carousel">
-						<div class="carousel-container">
-							<div class="carousel-slide">
-								<img src="images/FT/FT1.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Educational Trips</h3>
-									<p>Students learning outside the classroom</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT2.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT1.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT3.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT4.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT5.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT6.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT7.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT8.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT9.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT12.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/FT/FT2.jpg" alt="Educational field trip">
-								<div class="carousel-caption-text">
-									<h3>Exploring Nature</h3>
-									<p>Students discovering the wonders of nature during educational trips</p>
-								</div>
-							</div>
-						</div>
-						<div class="carousel-nav">
-							<button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
-							<button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
-						</div>
-						<div class="carousel-indicators">
-							<div class="carousel-indicator active"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Sportsfest Tab Content -->
-				<div id="sportsfest" class="event-content">
-					<div class="event-carousel">
-						<div class="carousel-container">
-							<div class="carousel-slide">
-								<img src="images/SF/SF10.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Annual Sportsfest</h3>
-									<p>Students compete in various sports activities to promote teamwork and healthy competition</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF1.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF11.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF2.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF3.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF4.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF5.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF6.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF7.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF8.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/SF/SF9.jpg" alt="Sportsfest basketball game">
-								<div class="carousel-caption-text">
-									<h3>Team Sports</h3>
-									<p>Fostering teamwork and sportsmanship among students</p>
-								</div>
-							</div>
-						</div>
-						<div class="carousel-nav">
-							<button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
-							<button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
-						</div>
-						<div class="carousel-indicators">
-							<div class="carousel-indicator active"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- Cultural Events Tab Content -->
-				<div id="cultural" class="event-content">
-					<div class="event-carousel">
-						<div class="carousel-container">
-							<div class="carousel-slide">
-								<img src="images/culture/cultural11.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Performances</h3>
-									<p>Showcasing traditional dances and music</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural1.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural2.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural3.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural4.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural5.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural6.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural7.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural8.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural9.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural10.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural12.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural13.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-							<div class="carousel-slide">
-								<img src="images/culture/cultural5.jfif" alt="Cultural dance performance">
-								<div class="carousel-caption-text">
-									<h3>Cultural Festival</h3>
-									<p>Celebrating diversity and cultural heritage</p>
-								</div>
-							</div>
-						</div>
-						<div class="carousel-nav">
-							<button class="carousel-btn carousel-prev"><i class="fas fa-chevron-left"></i></button>
-							<button class="carousel-btn carousel-next"><i class="fas fa-chevron-right"></i></button>
-						</div>
-						<div class="carousel-indicators">
-							<div class="carousel-indicator active"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-							<div class="carousel-indicator"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-
-		
-        <!-- About Section -->
-        <section id="about-profile" class="profile-section section">
-            <img src="logo.png" alt="Cieverose College Logo" class="profile-logo">
-            <div class="profile-content">
-                <h2>Why Choose Cieverose College, Inc.?</h2>
-                <p>We provide a nurturing environment that fosters academic excellence, character development, and practical skills to prepare students for success in their chosen fields and in life.</p>
-                
-                <div class="programs mt-lg">
-                    <article class="program-card">
-                        <div class="program-card-content">
-                            <h3><i class="fas fa-award text-accent"></i> Quality Education</h3>
-                            <p>Our curriculum is designed to meet industry standards while fostering critical thinking and practical skills. We maintain small class sizes to ensure personalized attention for each student.</p>
-                        </div>
-                    </article>
-                    
-                    <article class="program-card">
-                        <div class="program-card-content">
-                            <h3><i class="fas fa-users text-accent"></i> Experienced Faculty</h3>
-                            <p>Learn from industry professionals and educators committed to your success. Our faculty members combine academic expertise with real-world experience to provide relevant, engaging instruction.</p>
-                        </div>
-                    </article>
-                    
-                    <article class="program-card">
-                        <div class="program-card-content">
-                            <h3><i class="fas fa-hands-helping text-accent"></i> Holistic Development</h3>
-                            <p>We nurture not just academic growth but also character, leadership, and life skills. Our programs include extracurricular activities, community service, and values formation to develop well-rounded individuals.</p>
-                        </div>
-                    </article>
-                </div>
-                
-                <a href="https://www.facebook.com/profile.php?id=100069140122435" class="profile-link" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-facebook"></i> Visit Our Facebook Page
-                </a>
-            </div>
-        </section>
-        
-		
-		
-		
-		
-		
-        <!-- Contact Section -->
-		<section id="contact" class="section bg-section">
-			<div class="container">
-				<h2 class="section-title">Contact Us</h2>
-				<p class="text-center mb-xl">We'd love to hear from you. Reach out for inquiries or visit our campus.</p>
-				
-				<div class="contact-grid">
-					<article class="contact-card">
-						<div class="contact-card-content">
-							<div class="contact-icon">
-								<i class="fas fa-map-marker-alt text-accent"></i>
-							</div>
-							<h3>Campus Address</h3>
-							<address>
-								<a href="https://maps.app.goo.gl/8PD8L7VCfyoL6Fca7" 
-								  target="_blank" 
-								  rel="noopener noreferrer"
-								  class="contact-link address-link">
-									<i class="fas fa-map-pin"></i>
-									<span>
-										Lot 4 Block 51(1644) Ilang-Ilang Street<br>
-										Camarin, Caloocan City
-									</span>
-									<i class="fas fa-external-link-alt ml-2"></i>
-								</a>
-							</address>
-							<button class="directions-btn" onclick="openDirections()">
-								<i class="fas fa-directions"></i> Get Directions
-							</button>
-						</div>
-					</article>
-					
-					<article class="contact-card">
-						<div class="contact-card-content">
-							<div class="contact-icon">
-								<i class="fas fa-phone-alt text-accent"></i>
-							</div>
-							<h3>Contact Numbers</h3>
-							<div class="contact-numbers">
-								<div class="contact-item">
-									<div class="contact-number">
-										<a href="tel:+639171485067" class="contact-link call">
-											<i class="fas fa-phone"></i> +63 (917) 148-5067
-										</a>
-										<div class="contact-actions">
-											<a href="tel:+639171485067" class="action-btn call-btn" title="Call">
-												<i class="fas fa-phone"></i>
-											</a>
-											<a href="sms:+639171485067" class="action-btn sms-btn" title="Send SMS">
-												<i class="fas fa-comment-alt"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-								
-								<div class="contact-item">
-									<div class="contact-number">
-										<a href="tel:+639176769200" class="contact-link call">
-											<i class="fas fa-phone"></i> +63 (917) 676-9200
-										</a>
-										<div class="contact-actions">
-											<a href="tel:+639176769200" class="action-btn call-btn" title="Call">
-												<i class="fas fa-phone"></i>
-											</a>
-											<a href="sms:+639176769200" class="action-btn sms-btn" title="Send SMS">
-												<i class="fas fa-comment-alt"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-								
-								<div class="contact-item">
-									<div class="contact-number">
-										<a href="tel:+639178322402" class="contact-link call">
-											<i class="fas fa-phone"></i> +63 (917) 832-2402
-										</a>
-										<div class="contact-actions">
-											<a href="tel:+639178322402" class="action-btn call-btn" title="Call">
-												<i class="fas fa-phone"></i>
-											</a>
-											<a href="sms:+639178322402" class="action-btn sms-btn" title="Send SMS">
-												<i class="fas fa-comment-alt"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</article>
-					
-					<article class="contact-card">
-						<div class="contact-card-content">
-							<div class="contact-icon">
-								<i class="fas fa-clock text-accent"></i>
-							</div>
-							<h3>Office Hours</h3>
-							<div class="office-hours">
-								<div class="hours-item">
-									<span class="day">Monday - Friday</span>
-									<span class="time">8:00 AM - 5:00 PM</span>
-								</div>
-								<div class="hours-item">
-									<span class="day">Saturday</span>
-									<span class="time">9:00 AM - 12:00 PM</span>
-								</div>
-								<div class="hours-item">
-									<span class="day">Sunday</span>
-									<span class="time closed">Closed</span>
-								</div>
-							</div>
-							<div class="current-status">
-								<span id="status-indicator" class="status-indicator"></span>
-								<span id="status-text">Checking current status...</span>
-							</div>
-						</div>
-					</article>
-				</div>
-				
-				
-			</div>
-		</section>
-
-
-
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <img src="logo.png" alt="School Logo" class="footer-logo">
-                    <p>Providing quality education since 2010. Our mission is to nurture young minds and prepare them for the future.</p>
-                    <div class="social-links">
-                        <a href="https://www.facebook.com/profile.php?id=100069140122435" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
-                        <!-- <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a> -->
-                        <!-- <a href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a> -->
-                        <!-- <a href="#" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a> -->
-                    </div>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#programs">Programs</a></li>
-                        <li><a href="#library">Library</a></li>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li><a href="#">Admissions</a></li>
-                        <li><a href="#">Scholarships</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Senior High School Strands</h3>
-                    <ul>
-                        <li><a href="#">Information and Communication Technology</a></li>
-                        <li><a href="#">Home Economics</a></li>
-                        <li><a href="#">Humanities and Social Sciences</a></li>
-                        <li><a href="#">Accountancy, Business and Management</a></li>
-                        <li><a href="#">General Academic Strand</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Newsletter</h3>
-                    <p>Subscribe to our newsletter for the latest updates and announcements.</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Your email address" required>
-                        <button type="submit">
-                            <i class="fas fa-paper-plane"></i> Subscribe
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="copyright">
-            <div class="container">
-                <div class="copyright-content">
-                    <p>&copy; 2025 Cieverose College, Inc. All rights reserved.</p>
-                    <div class="footer-links">
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Quick Actions Menu -->
-    <div class="quick-actions">
-        <div class="quick-action-btn" id="search-btn">
-            <i class="fas fa-search"></i>
-            <span class="tooltip">Search</span>
-        </div>
-        <div class="quick-action-btn">
-            <i class="fas fa-calendar"></i>
-            <span class="tooltip">Calendar</span>
-        </div>
-        <div class="quick-action-btn">
-            <i class="fas fa-envelope"></i>
-            <span class="tooltip">Contact</span>
-        </div>
+      </div>
     </div>
 
-    <!-- Back to Top Button -->
-    <div class="back-to-top" id="back-to-top">
-        <i class="fas fa-arrow-up"></i>
-    </div>
-
-    <!-- Search Modal -->
-    <div class="search-modal" id="search-modal">
-        <div class="search-modal-content">
-            <input type="text" id="search-input" placeholder="Search...">
-            <button class="search-modal-close" id="search-modal-close">
-                <i class="fas fa-times"></i>
-            </button>
+    <!-- 2. Periodicals -->
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span><i class="fas fa-newspaper"></i> Periodicals Collection <span class="count">20 items</span></span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-content-inner">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>No.</th><th>Title</th><th>Publisher</th><th>Year/Issue</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Mega Magazine</td><td>Mega Publishing</td><td>Feb 2025</td><td>Local lifestyle</td></tr>
+                <tr><td>2</td><td>Rising Tigers: The Nation Builders in Asia</td><td>Rising Tigers Media</td><td>2024</td><td>Business & leadership</td></tr>
+                <tr><td>3</td><td>Billboard PH Special - Ben and Ben Magazine</td><td>Billboard Philippines</td><td>2024</td><td>Entertainment</td></tr>
+                <tr><td>4</td><td>Vogue Magazine</td><td>Condé Nast</td><td>Dec 2023</td><td>International fashion</td></tr>
+                <tr><td>5</td><td>Vogue Magazine</td><td>Condé Nast</td><td>Oct 2023</td><td>International fashion</td></tr>
+                <tr><td>6</td><td>Vogue Magazine</td><td>Condé Nast</td><td>Sep 2023</td><td>International fashion</td></tr>
+                <tr><td>7</td><td>Vogue Magazine</td><td>Condé Nast</td><td>Jul 2023</td><td>International fashion</td></tr>
+                <tr><td>8</td><td>Vogue Magazine</td><td>Condé Nast</td><td>Jun 2023</td><td>International fashion</td></tr>
+                <tr><td>9</td><td>Vogue Magazine</td><td>Condé Nast</td><td>May 2023</td><td>International fashion</td></tr>
+                <tr><td>10</td><td>W Korea</td><td>W Korea Magazine</td><td>Feb 2022</td><td>Korean lifestyle</td></tr>
+                <tr><td>11</td><td>Harper's Bazaar</td><td>Harper's Bazaar</td><td>May 2022</td><td>International fashion</td></tr>
+                <tr><td>12</td><td>National Geographic Kids Almanac</td><td>National Geographic</td><td>2024</td><td>Children's science</td></tr>
+                <tr><td>13</td><td>Reader's Digest</td><td>Reader's Digest</td><td>2023</td><td>General interest</td></tr>
+                <tr><td>14</td><td>Cosmopolitan</td><td>Hearst</td><td>2023</td><td>Women's lifestyle</td></tr>
+                <tr><td>15</td><td>Esquire</td><td>Hearst</td><td>2023</td><td>Men's lifestyle</td></tr>
+                <tr><td>16</td><td>Time Magazine</td><td>Time USA</td><td>2023</td><td>News</td></tr>
+                <tr><td>17</td><td>Newsweek</td><td>Newsweek LLC</td><td>2023</td><td>News</td></tr>
+                <tr><td>18</td><td>Sports Illustrated</td><td>Sports Illustrated</td><td>2023</td><td>Sports</td></tr>
+                <tr><td>19</td><td>Entrepreneur</td><td>Entrepreneur Media</td><td>2023</td><td>Business</td></tr>
+                <tr><td>20</td><td>Forbes</td><td>Forbes Media</td><td>2023</td><td>Business & finance</td></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
 
-    <script src="script.js"></script>
-    <script src="middleware.js"></script>
+    <!-- 3. Filipiniana -->
+    <div class="accordion-item" id="filipiniana">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span><i class="fas fa-leaf"></i> Filipiniana Collection <span class="count">7 items</span></span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-content-inner">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Title</th><th>Author(s)</th><th>Year</th><th>Publisher</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>Insect Hag and Other Stories</td><td>Yvette Fernandez</td><td>2024</td><td>Anvil Publishing</td><td>Contemporary fiction</td></tr>
+                <tr><td>Mga Kuwento ni Lola Basyang (New Edition)</td><td>Severino Reyes (retold)</td><td>2023</td><td>Adarna House</td><td>Classic folktales</td></tr>
+                <tr><td>Mga Kwento ni Lola Basyang sa Modernong Panahon</td><td>Various Authors</td><td>2022</td><td>Lampara Books</td><td>Modern retelling</td></tr>
+                <tr><td>Bayaning Pilipino: Mga Kwento ng Kabayanihan</td><td>Various Authors</td><td>2021</td><td>Anvil Publishing</td><td>Hero stories</td></tr>
+                <tr><td>Tala: Mga Kuwento ng Kababaihan</td><td>Various Authors</td><td>2021</td><td>Ateneo de Manila Press</td><td>Women's narratives</td></tr>
+                <tr><td>Mga Dula sa Panahon ng Pandemya</td><td>Various Authors</td><td>2020</td><td>UP Press</td><td>Plays on pandemic</td></tr>
+                <tr><td>Filipino Poetry Today</td><td>Various Filipino Poets</td><td>2020</td><td>DLSU Press</td><td>Contemporary poetry</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Book List (sample) -->
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span><i class="fas fa-book-open"></i> General Book Collection <span class="count">137+ items</span></span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-content-inner">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>No.</th><th>Author</th><th>Title</th><th>Year</th><th>Vol.</th><th>Subject</th><th>Copies</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Vistan, Deogracias</td><td>The Filipino Entrepreneur</td><td>2023</td><td>1st Ed</td><td>ECC 101</td><td>6</td></tr>
+                <tr><td>2</td><td>Feron, Jose</td><td>The Greatest Salesman I Know Does Not Sell</td><td>2022</td><td>1st Ed</td><td>ECC 101</td><td>6</td></tr>
+                <tr><td>3</td><td>Smith, Mark</td><td>The Entrepreneur's Guide to the Art of War</td><td>2021</td><td>1st Ed</td><td>ECC 101</td><td>6</td></tr>
+                <tr><td>4</td><td>Garcia, M. L</td><td>The Self and Identity: A Multidisciplinary Approach</td><td>2021</td><td>1st Ed</td><td>GE1_UTS</td><td>10</td></tr>
+                <tr><td>5</td><td>Reyes, J. P</td><td>Understanding Human Behavior and the Self</td><td>2022</td><td>1st Ed</td><td>GE1_UTS</td><td>10</td></tr>
+                <tr><td>6</td><td>Santos, L. M</td><td>Essentials of Business Finance</td><td>2023</td><td>2nd Ed</td><td>BA 201</td><td>8</td></tr>
+                <tr><td>7</td><td>Tan, C. K</td><td>Principles of Marketing</td><td>2022</td><td>1st Ed</td><td>BA 202</td><td>8</td></tr>
+                <tr><td>8</td><td>Lim, J. R</td><td>Introduction to ICT</td><td>2023</td><td>1st Ed</td><td>ICT 101</td><td>12</td></tr>
+              </tbody>
+            </table>
+            <p class="mt-2" style="color: var(--light-text); font-size:0.9rem;"><i class="fas fa-ellipsis-h"></i> Full catalog available at the library circulation desk.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STUDY SPACES ===== -->
+    <h2 class="section-title" id="study-spaces"><i class="fas fa-chair text-accent"></i> Study Spaces & Facilities</h2>
+    <div class="study-spaces">
+      <div class="study-card"><i class="fas fa-user-graduate"></i><h4>Quiet Zone</h4><p>Individual carrels, silent study</p></div>
+      <div class="study-card"><i class="fas fa-people-arrows"></i><h4>Group Study</h4><p>Rooms for 4–6 persons, whiteboards</p></div>
+      <div class="study-card"><i class="fas fa-laptop"></i><h4>Digital Lab</h4><p>20 workstations with research databases</p></div>
+      <div class="study-card"><i class="fas fa-couch"></i><h4>Lounge Area</h4><p>Casual reading, periodicals</p></div>
+    </div>
+
+    <!-- ===== LIBRARY HOURS ===== -->
+    <div id="hours" style="background: white; border-radius: 16px; padding: 24px 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #eef2f7; margin: 20px 0 30px;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+        <div><i class="fas fa-clock" style="color: var(--primary-color); font-size: 1.8rem; margin-right: 15px;"></i></div>
+        <div><strong>Regular Hours:</strong> Mon–Fri 8:00 AM – 6:00 PM · Sat 9:00 AM – 2:00 PM</div>
+        <div><span style="background: #28a745; color: white; padding: 4px 16px; border-radius: 30px; font-weight: 600;">Open now</span></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img src="logo.png" alt="Cieverose College Logo" style="height:50px; margin-bottom: 12px;">
+          <p style="color:#cfd9e6; max-width:260px;">Cieverose College, Inc. · Quality education since 2010.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#collections">Library</a></li>
+            <li><a href="index.html#programs">Programs</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Online Catalog</a></li>
+            <li><a href="#">E-books</a></li>
+            <li><a href="#">Research Guides</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="https://www.facebook.com/profile.php?id=100069140122435" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i> library@cieverose.edu</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 Cieverose College, Inc. · Library Services</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JAVASCRIPT ===== -->
+  <script>
+    // Mobile menu toggle (main nav)
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.getElementById('navMenu');
+    if (menuBtn && navMenu) {
+      menuBtn.addEventListener('click', function() {
+        navMenu.classList.toggle('show');
+        this.innerHTML = navMenu.classList.contains('show') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+      });
+    }
+
+    // Accordion toggle
+    function toggleAccordion(header) {
+      const content = header.nextElementSibling;
+      if (!content) return;
+      const parent = header.closest('.accordion-item').parentElement;
+      if (parent) {
+        parent.querySelectorAll('.accordion-content').forEach(c => {
+          if (c !== content) {
+            c.classList.remove('open');
+            c.style.maxHeight = '0px';
+          }
+        });
+      }
+      const isOpen = content.classList.contains('open');
+      if (isOpen) {
+        content.classList.remove('open');
+        content.style.maxHeight = '0px';
+      } else {
+        content.classList.add('open');
+        content.style.maxHeight = content.scrollHeight + 'px';
+      }
+    }
+
+    // Open first accordion by default
+    window.addEventListener('load', function() {
+      const first = document.querySelector('.accordion-item .accordion-content');
+      if (first) {
+        first.classList.add('open');
+        first.style.maxHeight = first.scrollHeight + 'px';
+      }
+    });
+
+    // Subnav smooth scroll (simple)
+    document.querySelectorAll('.subnav-links a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId && targetId.startsWith('#')) {
+          e.preventDefault();
+          const target = document.querySelector(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
