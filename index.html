@@ -9,10 +9,9 @@
   <meta name="apple-mobile-web-app-title" content="Library · Cieverose">
   <meta name="description" content="Cieverose College Library – resources, collections, and study spaces.">
   <title>Library · Cieverose College, Inc.</title>
-  <!-- Font Awesome 6 (free) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ===== BASE STYLES (blends with main site) ===== */
+    /* ===== BASE STYLES ===== */
     :root {
       --primary-color: #1a5f9a;
       --secondary-color: #FFD700;
@@ -20,10 +19,8 @@
       --text-color: #333;
       --light-text: #6c757d;
       --white: #fff;
-      --nav-text-color: #ffffff;
       --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s ease;
-      --radius-md: 8px;
     }
     * {
       margin: 0;
@@ -41,9 +38,10 @@
       margin: 0 auto;
       padding: 0 20px;
     }
-    /* ===== MAIN NAVIGATION (mirrors main site) ===== */
+
+    /* ===== MAIN NAVIGATION ===== */
     .main-nav {
-      background: linear-gradient(135deg, #1877f2 0%, #0d5bb7 100%);
+      background: linear-gradient(135deg, #1a5f9a 0%, #0d4a7a 100%);
       padding: 0 20px;
       box-shadow: var(--shadow);
       position: sticky;
@@ -92,10 +90,7 @@
     .main-nav ul li a i {
       font-size: 1rem;
     }
-    .main-nav ul li a:hover {
-      border-bottom-color: var(--secondary-color);
-      color: var(--secondary-color);
-    }
+    .main-nav ul li a:hover,
     .main-nav ul li a.active {
       border-bottom-color: var(--secondary-color);
       color: var(--secondary-color);
@@ -115,7 +110,7 @@
       .main-nav ul {
         display: none;
         flex-direction: column;
-        background: #0d5bb7;
+        background: #0d4a7a;
         padding: 20px;
         width: 100%;
         position: absolute;
@@ -131,15 +126,18 @@
       }
     }
 
-    /* ===== LIBRARY SUB-NAV ===== */
+    /* ===== LIBRARY SUB-NAV - FIXED VISIBILITY ===== */
     .library-subnav {
-      background: white;
-      border-bottom: 2px solid #eef2f7;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      background: #ffffff;
+      border-bottom: 3px solid var(--secondary-color);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
       position: sticky;
-      top: 68px; /* adjust to main nav height */
+      top: 68px;
       z-index: 999;
       padding: 0 20px;
+      min-height: 56px;
+      display: flex;
+      align-items: center;
     }
     .subnav-container {
       max-width: 1200px;
@@ -150,20 +148,23 @@
       justify-content: space-between;
       gap: 12px;
       padding: 8px 0;
+      width: 100%;
     }
     .subnav-links {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px 20px;
+      gap: 6px 24px;
       list-style: none;
+      padding: 0;
+      margin: 0;
     }
     .subnav-links li a {
       color: #2c3e50;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 0.95rem;
-      padding: 6px 0;
-      border-bottom: 2px solid transparent;
+      padding: 8px 4px;
+      border-bottom: 3px solid transparent;
       transition: var(--transition);
       display: inline-flex;
       align-items: center;
@@ -182,25 +183,28 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
     .subnav-actions .search-box {
       display: flex;
       align-items: center;
       background: #f0f4fa;
       border-radius: 30px;
-      padding: 4px 12px;
+      padding: 4px 14px;
       transition: var(--transition);
+      border: 1px solid #e0e6ed;
     }
     .subnav-actions .search-box:focus-within {
       background: #e6ecf5;
-      box-shadow: 0 0 0 2px rgba(26,95,154,0.2);
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(26, 95, 154, 0.15);
     }
     .subnav-actions .search-box input {
       border: none;
       background: transparent;
       padding: 8px 6px;
       font-size: 0.9rem;
-      width: 140px;
+      width: 150px;
       outline: none;
     }
     .subnav-actions .search-box i {
@@ -211,7 +215,7 @@
       background: var(--primary-color);
       color: white;
       border: none;
-      padding: 8px 18px;
+      padding: 8px 20px;
       border-radius: 30px;
       font-weight: 600;
       font-size: 0.85rem;
@@ -220,53 +224,81 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      white-space: nowrap;
     }
     .subnav-actions .btn-reserve:hover {
-      background: #124a7a;
+      background: #0d4a7a;
       transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(26, 95, 154, 0.3);
     }
-    @media (max-width: 700px) {
+
+    @media (max-width: 768px) {
+      .library-subnav {
+        top: 60px;
+        min-height: auto;
+        padding: 8px 16px;
+      }
       .subnav-container {
         flex-direction: column;
         align-items: stretch;
-        gap: 8px;
+        gap: 10px;
+        padding: 6px 0;
       }
       .subnav-links {
         justify-content: center;
+        gap: 6px 16px;
+      }
+      .subnav-links li a {
+        font-size: 0.85rem;
+        padding: 6px 2px;
       }
       .subnav-actions {
         justify-content: center;
         flex-wrap: wrap;
       }
       .subnav-actions .search-box input {
-        width: 100px;
+        width: 120px;
+      }
+    }
+    @media (max-width: 480px) {
+      .subnav-links {
+        gap: 4px 10px;
+      }
+      .subnav-links li a {
+        font-size: 0.78rem;
+        padding: 4px 2px;
+      }
+      .subnav-actions .search-box input {
+        width: 90px;
+      }
+      .subnav-actions .btn-reserve {
+        font-size: 0.75rem;
+        padding: 6px 14px;
       }
     }
 
     /* ===== LIBRARY HERO ===== */
     .library-hero {
-      background: linear-gradient(rgba(26, 95, 154, 0.75), rgba(13, 59, 102, 0.8)), 
+      background: linear-gradient(rgba(26, 95, 154, 0.85), rgba(13, 59, 102, 0.9)), 
                   url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMxYTVmOWEiLz48cGF0aCBkPSJNMjAgMjBoMTB2MTBIMjB6TTUwIDIwaDEwdjEwSDUwek0zNSA0MGgxMHYxMEgzNXpNMjAgNTBoMTB2MTBIMjB6TTUwIDUwaDEwdjEwSDUweiIgZmlsbD0iI2ZmZDcwMCIgb3BhY2l0eT0iMC4yIi8+PC9zdmc+');
       background-size: cover, 60px 60px;
       background-blend-mode: overlay;
       color: white;
-      padding: 60px 0 50px;
+      padding: 70px 0 50px;
       text-align: center;
       margin-bottom: 30px;
-      border-radius: 0 0 40px 40px;
     }
     .library-hero h1 {
-      font-size: 2.6rem;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
     }
     .library-hero h1 i {
       color: var(--secondary-color);
       margin-right: 12px;
     }
     .library-hero p {
-      font-size: 1.15rem;
-      opacity: 0.9;
+      font-size: 1.2rem;
+      opacity: 0.92;
       max-width: 650px;
       margin: 0 auto 20px;
     }
@@ -275,18 +307,18 @@
       justify-content: center;
       gap: 30px;
       flex-wrap: wrap;
-      margin-top: 20px;
+      margin-top: 25px;
     }
     .library-hero .stat-item {
       background: rgba(255,255,255,0.15);
-      padding: 10px 24px;
+      padding: 10px 28px;
       border-radius: 50px;
       backdrop-filter: blur(4px);
       border: 1px solid rgba(255,255,255,0.2);
     }
     .library-hero .stat-item span {
       font-weight: 700;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       color: var(--secondary-color);
     }
 
@@ -321,7 +353,7 @@
     }
     .card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.1);
     }
     .card .icon {
       font-size: 2.2rem;
@@ -491,7 +523,6 @@
       color: #a0b3cc;
       font-size: 0.9rem;
     }
-
     @media (max-width: 600px) {
       .library-hero h1 { font-size: 2rem; }
       .library-hero .stats { gap: 12px; }
@@ -500,11 +531,10 @@
     }
     .mt-2 { margin-top: 20px; }
     .text-accent { color: var(--accent-color); }
-    .flex { display: flex; align-items: center; gap: 8px; }
   </style>
 </head>
 <body>
-  <!-- ===== MAIN NAVIGATION (identical to main site) ===== -->
+  <!-- ===== MAIN NAVIGATION ===== -->
   <nav class="main-nav">
     <div class="nav-container">
       <a href="index.html" class="logo">
@@ -524,7 +554,7 @@
     </div>
   </nav>
 
-  <!-- ===== LIBRARY SUB-NAV (library-specific navigation) ===== -->
+  <!-- ===== LIBRARY SUB-NAV - NOW VISIBLE ===== -->
   <div class="library-subnav">
     <div class="subnav-container">
       <ul class="subnav-links">
@@ -685,7 +715,7 @@
       </div>
     </div>
 
-    <!-- 4. Book List (sample) -->
+    <!-- 4. General Book List -->
     <div class="accordion-item">
       <div class="accordion-header" onclick="toggleAccordion(this)">
         <span><i class="fas fa-book-open"></i> General Book Collection <span class="count">137+ items</span></span>
@@ -773,7 +803,7 @@
 
   <!-- ===== JAVASCRIPT ===== -->
   <script>
-    // Mobile menu toggle (main nav)
+    // Mobile menu toggle
     const menuBtn = document.getElementById('mobileMenuBtn');
     const navMenu = document.getElementById('navMenu');
     if (menuBtn && navMenu) {
@@ -815,7 +845,7 @@
       }
     });
 
-    // Subnav smooth scroll (simple)
+    // Subnav smooth scroll and active state
     document.querySelectorAll('.subnav-links a').forEach(link => {
       link.addEventListener('click', function(e) {
         const targetId = this.getAttribute('href');
@@ -825,6 +855,8 @@
           if (target) {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
+          document.querySelectorAll('.subnav-links a').forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
         }
       });
     });
